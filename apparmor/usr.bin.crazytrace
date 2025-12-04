@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# AppArmor policy for crazytrace
+
+include <tunables/global>
+
+/usr/bin/crazytrace flags=(enforce) {
+  include <abstractions/base>
+
+  capability net_admin,
+  capability setpcap,
+
+  # used by libtuntap for IPv6 test
+  network (create) inet dgram,
+  network (create) inet6 dgram,
+  
+  # used by libtuntap to manage the TAP device
+  network (create) netlink raw,
+  network (bind) netlink raw,
+  network (getattr) netlink raw,
+  network (setattr) netlink raw,
+  network (getopt) netlink raw,
+  network (setopt) netlink raw,
+  network (receive) netlink raw,
+  network (send) netlink raw,
+
+  /dev/net/tun rw,
+  @{etc_ro}/crazytrace/*.yaml r,
+  /usr/bin/ip mrix,
+  /usr/sbin/ip mrix,
+  /bin/ip mrix,
+  /sbin/ip mrix,
+}
+
+# vim:syntax=apparmor

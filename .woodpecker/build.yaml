@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+when:
+  - event: manual
+    branch: main
+  - event: push
+    branch: main
+
+steps:
+  - name: build
+    image: codeberg.org/mark22k/ci:latest
+    pull: true
+    commands:
+      - apt-get update
+      - apt-get --yes install build-essential meson ninja-build libboost1.88-all-dev libyaml-cpp-dev libtins-dev libseccomp-dev libcap-ng-dev clang-tidy cppcheck flawfinder debhelper debhelper-compat config-package-dev ruby-mdl
+      - export PATH="$HOME/.local/bin:$PATH"
+      - make debian

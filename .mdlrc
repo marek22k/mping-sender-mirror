@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Marek Küthe <m.k@mk16.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+show_kramdown_warnings true
+style File.join(File.dirname(__FILE__), '.mdl.style')
+all
+rules '~MD013', '~MD014', '~MD026'

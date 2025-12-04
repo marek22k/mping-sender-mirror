@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+option('install_systemd_unit', type: 'boolean', description: 'Install systemd unit file (default: false)', value: false)
+option('install_apparmor_profile', type: 'boolean', description: 'Install apparmor profile (default: false)', value: false)
+option('native', type: 'boolean', description: 'Optimize build for local CPU architecture (default: false)', value: false)

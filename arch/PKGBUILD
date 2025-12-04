@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+# SPDX-License-Identifier: 0BSD
+#
+# Maintainer: Marek Küthe <m.k@mk16.de>
+
+pkgname=crazytrace
+pkgver=v1.0.5
+pkgrel=1
+pkgdesc="a network simulation program"
+arch=('x86_64')
+url="https://codeberg.org/mark22k/crazytrace"
+license=('GPL-3.0-or-later')
+depends=('boost' 'libtins' 'yaml-cpp' 'libcap-ng' 'libseccomp')
+makedepends=('meson' 'gtest')
+source=('https://codeberg.org/mark22k/crazytrace/archive/v1.0.5.tar.gz')
+sha512sums=('086038c7e173cd4e41b761bf07fe18af6a68bae7c2fd927b587aad7433e593decfb7f5e92e79b4ab9c4dceeb8fd6bdd2006e95c24c69c8b1f3b963eb421c8f50')
+
+build() {
+  meson compile -C build
+}
+
+check() {
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  meson install -C build --destdir "$pkgdir"
+}

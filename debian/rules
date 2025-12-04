@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+# SPDX-FileCopyrightText: 2024-2025 Marek Küthe <m.k@mk16.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	test -d build && make clean || true
+
+override_dh_auto_configure:
+	meson setup --prefix=/usr -Dinstall_systemd_unit=true -Dinstall_apparmor_profile=true . build
+
+override_dh_auto_test:
+	make test
+	make check

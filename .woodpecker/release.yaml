@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+when:
+  - event: tag
+
+steps:
+  - name: release
+    environment:
+      CODEBERG_GIT_USERNAME:
+        from_secret: codeberg_git_username
+      CODEBERG_GIT_PASSWORD:
+        from_secret: codeberg_git_password
+    image: codeberg.org/mark22k/ci:latest
+    pull: true
+    commands:
+      - export PATH="$HOME/.local/bin:$PATH"
+      - apt-get update
+      - apt-get --yes install build-essential meson ninja-build libboost1.88-all-dev libyaml-cpp-dev libtins-dev libseccomp-dev libcap-ng-dev clang-tidy cppcheck flawfinder debhelper debhelper-compat ruby-mdl
+      - make debian
+      - |
+        for FILE in ../crazytrace_*.deb; do
+          curl --user $CODEBERG_GIT_USERNAME:$CODEBERG_GIT_PASSWORD --upload-file $FILE https://codeberg.org/api/packages/mark22k/debian/pool/stable/main/upload
+        done
