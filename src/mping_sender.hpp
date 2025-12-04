@@ -13,16 +13,21 @@ namespace MPingSender
             Sender(boost::asio::any_io_executor ex,
                    std::function<void(boost::system::error_code)>
                        network_error_handler,
+                   std::function<void(boost::system::error_code)>
+                       timer_error_handler,
                    const std::string& bind_address,
                    const int bind_port,
                    const std::string& address,
-                   const int port);
+                   const int port,
+                   boost::asio::ip::multicast::hops hops,
+                   const std::string& interface);
 
         private:
             void schedule_send();
             void send_packet();
 
             MulticastTxSocket _socket;
+            std::function<void(boost::system::error_code)> _timer_error_handler;
             boost::asio::ip::udp::endpoint _endpoint;
             boost::asio::steady_timer _timer;
     };

@@ -7,16 +7,20 @@ using namespace MPingSender;
 MPingSender::Sender::Sender(
     boost::asio::any_io_executor ex,
     std::function<void(boost::system::error_code)> network_error_handler,
+    std::function<void(boost::system::error_code)> timer_error_handler,
     const std::string& bind_address,
     const int bind_port,
     const std::string& address,
-    const int port) :
+    const int port,
+    boost::asio::ip::multicast::hops hops,
+    const std::string& interface) :
     _socket(ex,
             network_error_handler,
             boost::asio::ip::udp::endpoint(
                 boost::asio::ip::make_address(bind_address), bind_port),
-            static_cast<boost::asio::ip::multicast::hops>(32),
-            std::string("lab-client01")),
+            hops,
+            interface),
+    _timer_error_handler(timer_error_handler),
     _endpoint(boost::asio::ip::make_address(address), port),
     _timer(ex)
 {
@@ -32,6 +36,7 @@ void MPingSender::Sender::schedule_send()
             if (ec)
             {
                 BOOST_LOG_TRIVIAL(fatal) << "Failed to schedule timer.";
+                this->_timer_error_handler(ec);
             }
             else
             {
