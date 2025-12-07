@@ -70,6 +70,69 @@ void MPingSender::MPingState::set_current_time() noexcept
     this->_tv = std::chrono::steady_clock::now();
 }
 
+/*
+MPing packet =
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |  Ver  |T|L| 0 |                                               |
+    |                                                               |
+    |                     Source Host                               |
+    |                                                               |
+    |               |                                               |
+    |                                                               |
+    |                     Destination Host                          |
+    |                                                               |
+    |               | Seq   | PID   | Seconds       | Microseconds  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+    Ver = VERSION = "2.0\0"
+    T = TYPE
+    +----------+-------+
+    | T = TYPE | VALUE |
+    +----------+-------+
+    | SENDER   | "s"   |
+    | RECEIVER | "r"   |
+    +----------+-------+
+    L = TTL
+    Source Host = Host
+    Destination Host = Host
+    Seq = Sequence number
+    PID = PID or Random Number
+    Seconds = Seconds (Monotonic clock)
+    Microseconds = Microseconds (Monotonic clock)
+
+    IPv6 Host =
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |10 | P |   0   | IPv6 Address                  | 0             |
+    |                            0                                  |
+    |                            0                                  |
+    |                            0                                  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    P = Port
+
+    IPv4 Host =
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | 2 | P | IPv4  |                   0                           |
+    |                            0                                  |
+    |                            0                                  |
+    |                            0                                  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+*/
+
+std::string MPingSender::MPingState::serialize() const
+{
+    constexpr std::array<char, 4> mstate_version =
+        std::to_array(MPING_STATE_VERSION);
+    std::string result;
+    result.resize(288);
+    return "";
+}
+
 MPING_STATE_TYPE MPingSender::MPingState::get_type() const noexcept
 {
     return this->_type;

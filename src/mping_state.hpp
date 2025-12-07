@@ -36,6 +36,7 @@ namespace MPingSender
 
             void next_seq_no() noexcept;
             void set_current_time() noexcept;
+            [[nodiscard]] std::string serialize() const;
 
             [[nodiscard]] MPING_STATE_TYPE get_type() const noexcept;
             void set_type(MPING_STATE_TYPE state) noexcept;
@@ -55,13 +56,15 @@ namespace MPingSender
 
         private:
             MPING_STATE_TYPE _type;
-            uint8_t _ttl; /* unsigned char ~ 1 byte */
-            boost::asio::ip::address _src_host; /* sockaddr_storage */
-            boost::asio::ip::address _dest_host; /* sockaddr_storage */
-            uint32_t _sequence_number; /* unsigned int ~ 4 bytes */
-            uint32_t _pid; /* pid_t ~ 4 bytes */
+            uint8_t _ttl;
+            boost::asio::ip::address _src_host;
+            uint32_t _src_port;
+            boost::asio::ip::address _dest_host;
+            uint32_t _dest_port;
+            uint32_t _sequence_number;
+            uint32_t _pid;
             std::chrono::time_point<std::chrono::steady_clock>
-                _tv; /* struct timeval */
+                _tv;
     };
 } // namespace MPingSender
 
