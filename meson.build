@@ -266,7 +266,7 @@ endif
 
 if get_option('install_systemd_unit')
     install_data(
-        'systemd/crazytrace@.service',
+        'systemd/mping-sender@.service',
         install_dir: 'lib/systemd/system'
     )
     install_data(
@@ -277,7 +277,7 @@ endif
 
 if get_option('install_apparmor_profile')
     install_data(
-        'apparmor/usr.bin.crazytrace',
+        'apparmor/usr.bin.mping-sender',
         install_dir: '/etc/apparmor.d'
     )
 endif
