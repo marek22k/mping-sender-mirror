@@ -115,6 +115,8 @@ std::chrono::seconds MPingSender::MPingState::get_seconds() const noexcept
 std::chrono::microseconds
     MPingSender::MPingState::get_microseconds() const noexcept
 {
-    return std::chrono::duration_cast<std::chrono::microseconds>(
-        this->_tv.time_since_epoch());
+    auto duration = this->_tv.time_since_epoch();
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    auto remaining = duration - seconds;
+    return std::chrono::duration_cast<std::chrono::microseconds>(remaining);
 }
