@@ -266,7 +266,7 @@ endif
 
 if get_option('install_systemd_unit')
     install_data(
-        'systemd/mping-sender@.service',
+        'systemd/mping-sender.service',
         install_dir: 'lib/systemd/system'
     )
     install_data(
