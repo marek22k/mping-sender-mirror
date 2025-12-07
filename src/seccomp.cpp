@@ -225,8 +225,6 @@ void SeccompFilterContext::kill_ipc() const
 {
     // #lizard forgives
 
-    // without pipe, pipe2
-
     #ifdef SYS_ipc
     this->kill(SCMP_SYS(ipc)); // flawfinder: ignore
     #endif
@@ -293,8 +291,11 @@ void SeccompFilterContext::kill_ipc() const
     #ifdef SYS_shmdt
     this->kill(SCMP_SYS(shmdt)); // flawfinder: ignore
     #endif
-    #ifdef SYS_shmget
-    this->kill(SCMP_SYS(shmget)); // flawfinder: ignore
+    #ifdef SYS_pipe
+    this->kill(SCMP_SYS(pipe)); // flawfinder: ignore
+    #endif
+    #ifdef SYS_pipe2
+    this->kill(SCMP_SYS(pipe2)); // flawfinder: ignore
     #endif
 }
 
