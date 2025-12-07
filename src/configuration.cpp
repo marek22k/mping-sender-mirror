@@ -51,7 +51,7 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
                                         this->_log_level);
 }
 
-// NOLINTEND
+// NOLINTEND(cppcoreguidelines-pro-type-member-init)
 
 bool MPingSender::Configuration::get_help() const noexcept
 {

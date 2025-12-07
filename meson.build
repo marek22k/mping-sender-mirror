@@ -11,7 +11,7 @@ project(
         'buildtype=release',
         'optimization=2',
         'warning_level=3',
-        # 'werror=true',
+        'werror=true',
         'cpp_std=gnu++26',
         'b_asneeded=true',
         'b_lto=true',
