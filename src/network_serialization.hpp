@@ -68,10 +68,10 @@ namespace NetworkSerialization
         ipv6_to_sockaddr_storage(boost::asio::ip::address_v6 address,
                                  uint16_t port)
     {
-        std::array<unsigned char, 128> result;
+        std::array<unsigned char, 128> result = {};
         result.fill('\0');
 
-        auto it = result.begin();
+        auto * it = result.begin();
 
         /* 10 */
         constexpr uint16_t ipv6_type_int = 10;
@@ -97,10 +97,10 @@ namespace NetworkSerialization
         ipv4_to_sockaddr_storage(boost::asio::ip::address_v4 address,
                                  uint16_t port)
     {
-        std::array<unsigned char, 128> result;
+        std::array<unsigned char, 128> result = {};
         result.fill('\0');
 
-        auto it = result.begin();
+        auto * it = result.begin();
 
         /* 10 */
         constexpr uint16_t ipv4_type_int = 2;
