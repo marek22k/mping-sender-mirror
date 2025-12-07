@@ -153,38 +153,15 @@ std::string MPingSender::MPingState::serialize() const
     auto ttl = uint_to_array(this->_ttl);
     result.append(ttl.begin(), ttl.end());
 
-    constexpr std::array<char, 2> two_null_characters = {'\0', '\0'};
+    constexpr std::array<unsigned char, 2> two_null_characters = {'\0', '\0'};
     result.append(two_null_characters.begin(), two_null_characters.end());
 
     if (this->_src_host.is_v6())
     {
-        /* 10 */
-        constexpr uint16_t ipv6_type_int = 10;
-        constexpr std::array<unsigned char, 2> ipv6_type =
-            uint_to_array(ipv6_type_int);
-        result.append(ipv6_type.begin(), ipv6_type.end());
-
-        /* P */
-        const std::array<unsigned char, 2> port =
-            uint_to_array(this->_src_port);
-        result.append(port.begin(), port.end());
-
-        const std::array<unsigned char, 16> ipv6_bytes =
-            this->_src_host.to_v6().to_bytes();
-        result.append(ipv6_bytes.begin(), ipv6_bytes.end());
-
-        constexpr std::array<unsigned char, 108> padding = {
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'};
-        result.append(padding.begin(), padding.end());
+        const auto ipv6_sockaddr_storage =
+            ipv6_to_sockaddr_storage(this->_src_host.to_v6(), this->_src_port);
+        result.append(ipv6_sockaddr_storage.begin(),
+                      ipv6_sockaddr_storage.end());
     }
     else if (this->_src_host.is_v4())
     {
