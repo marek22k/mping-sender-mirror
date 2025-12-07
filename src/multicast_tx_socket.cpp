@@ -42,7 +42,7 @@ void MPingSender::MulticastTxSocket::send_packet(
         {
             if (ec)
             {
-                BOOST_LOG_TRIVIAL(fatal) << "Failed to send packet.";
+                BOOST_LOG_TRIVIAL(fatal) << "Failed to send packet." << ec.message();
                 this->_error_handler(ec);
             }
             else

@@ -117,7 +117,7 @@ namespace NetworkSerialization
 
         /* IPv4 */
         const std::array<unsigned char, 4> ipv4_bytes = address.to_bytes();
-        it = std::ranges::copy(ipv4_bytes, it).out;
+        std::ranges::copy(ipv4_bytes, it);
 
         return result;
     }
