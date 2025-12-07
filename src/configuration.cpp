@@ -32,7 +32,11 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
     this->_help = vm.contains("help");
     if (this->_help)
     {
-        std::clog << options << std::endl;
+        std::clog << "mping-sender" << std::endl
+                  << std::endl
+                  << "Usage: mping-sender [configuration]" << std::endl
+                  << std::endl
+                  << options << std::endl;
         std::exit(EXIT_SUCCESS);
     }
 
