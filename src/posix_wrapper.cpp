@@ -6,7 +6,7 @@
 
 unsigned int PosixWrapper::if_nametoindex(const std::string& ifname)
 {
-    unsigned int result = ::if_nametoindex(ifname.c_str());
+    const unsigned int result = ::if_nametoindex(ifname.c_str());
     if (result == 0)
     {
         throw std::system_error(

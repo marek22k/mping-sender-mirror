@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 
 TEST(MPingStateTest, InitializeEmpty)
 {
-    MPingSender::MPingState state;
+    const MPingSender::MPingState state;
     EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
     EXPECT_EQ(state.get_ttl(), 0);
     EXPECT_TRUE(state.get_src_host().is_unspecified());
@@ -34,7 +34,7 @@ TEST(MPingStateTest, InitializeDefault)
         "fd72:807b:8257:bd92:80a1:32a0:f13d:b46d"));
     ASSERT_NE(addr1, addr2);
 
-    MPingSender::MPingState state(
+    const MPingSender::MPingState state(
         MPingSender::MPING_STATE_TYPE::SENDER, 44, addr1, 2579, addr2, 5572);
     EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
     EXPECT_EQ(state.get_ttl(), 44);
@@ -50,7 +50,7 @@ TEST(MPingStateTest, InitializeDefault)
     EXPECT_EQ(state.get_seconds(), 0s);
     EXPECT_EQ(state.get_microseconds(), 0s);
 
-    MPingSender::MPingState receiver_state(
+    const MPingSender::MPingState receiver_state(
         MPingSender::MPING_STATE_TYPE::RECEIVER, 0, addr1, 0, addr2, 0);
     EXPECT_EQ(receiver_state.get_type(),
               MPingSender::MPING_STATE_TYPE::RECEIVER);
@@ -77,15 +77,15 @@ TEST(MPingStateTest, InitializeWithCustomValues)
     const auto time =
         std::chrono::steady_clock::time_point(seconds + microseconds);
 
-    MPingSender::MPingState state(MPingSender::MPING_STATE_TYPE::SENDER,
-                                  ttl,
-                                  addr1,
-                                  src_port,
-                                  addr2,
-                                  dest_port,
-                                  seq_no,
-                                  pid,
-                                  time);
+    const MPingSender::MPingState state(MPingSender::MPING_STATE_TYPE::SENDER,
+                                        ttl,
+                                        addr1,
+                                        src_port,
+                                        addr2,
+                                        dest_port,
+                                        seq_no,
+                                        pid,
+                                        time);
     EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
     EXPECT_EQ(state.get_ttl(), ttl);
     EXPECT_EQ(state.get_src_host(), addr1);
@@ -98,7 +98,7 @@ TEST(MPingStateTest, InitializeWithCustomValues)
     EXPECT_EQ(state.get_seconds(), seconds);
     EXPECT_EQ(state.get_microseconds(), microseconds);
 
-    MPingSender::MPingState receiver_state(
+    const MPingSender::MPingState receiver_state(
         MPingSender::MPING_STATE_TYPE::RECEIVER,
         ttl,
         addr1,
@@ -130,15 +130,15 @@ TEST(MPingStateTest, Serialization)
     const auto time =
         std::chrono::steady_clock::time_point(seconds + microseconds);
 
-    MPingSender::MPingState state(MPingSender::MPING_STATE_TYPE::SENDER,
-                                  ttl,
-                                  addr1,
-                                  src_port,
-                                  addr2,
-                                  dest_port,
-                                  seq_no,
-                                  pid,
-                                  time);
+    const MPingSender::MPingState state(MPingSender::MPING_STATE_TYPE::SENDER,
+                                        ttl,
+                                        addr1,
+                                        src_port,
+                                        addr2,
+                                        dest_port,
+                                        seq_no,
+                                        pid,
+                                        time);
     EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
     EXPECT_EQ(state.get_ttl(), ttl);
     EXPECT_EQ(state.get_src_host(), addr1);

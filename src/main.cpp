@@ -43,7 +43,7 @@ int main(int argc, char * argv[])
     #endif
 #endif
 #ifdef HAVE_SECCOMP
-        SeccompFilterContext seccomp_context(SCMP_ACT_ALLOW);
+        const SeccompFilterContext seccomp_context(SCMP_ACT_ALLOW);
         // see also
         // https://lists.boost.org/archives/list/boost-users@lists.boost.org/thread/YJ5RTK25HLPFEZ3XVBBFQDJOSPIIOBNA/
         // and https://sourceforge.net/p/asio/mailman/message/59260797/
@@ -66,11 +66,12 @@ int main(int argc, char * argv[])
         seccomp_context.kill_swap();
         seccomp_context.kill_sync();
         seccomp_context.kill_system_service();
+        seccomp_context.kill_signal();
         seccomp_context.load();
 #endif
 
         const auto args = std::span(argv, static_cast<std::size_t>(argc));
-        MPingSender::Configuration config(args);
+        const MPingSender::Configuration config(args);
 
         BOOST_LOG_TRIVIAL(info)
             << "Boost version (compile time): " << (BOOST_VERSION / 100'000)
@@ -103,7 +104,7 @@ int main(int argc, char * argv[])
 
         boost::asio::io_context io;
 
-        std::function<void(boost::system::error_code)> error_handler =
+        const std::function<void(boost::system::error_code)> error_handler =
             [](boost::system::error_code)
         {
             throw std::runtime_error("Fatal error");
