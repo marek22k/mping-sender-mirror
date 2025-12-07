@@ -150,12 +150,13 @@ std::string MPingSender::MPingState::serialize() const
     result.push_back(static_cast<char>(this->_type));
 
     /* L */
-    auto ttl = uint_to_array(this->_ttl);
+    auto ttl = uint_to_array(to_bigendian(this->_ttl));
     result.append(ttl.begin(), ttl.end());
 
     constexpr std::array<unsigned char, 2> two_null_characters = {'\0', '\0'};
     result.append(two_null_characters.begin(), two_null_characters.end());
 
+    /* Source Host */
     if (this->_src_host.is_v6())
     {
         const auto ipv6_sockaddr_storage =
@@ -165,11 +166,52 @@ std::string MPingSender::MPingState::serialize() const
     }
     else if (this->_src_host.is_v4())
     {
+        const auto ipv4_sockaddr_storage =
+            ipv4_to_sockaddr_storage(this->_src_host.to_v4(), this->_src_port);
+        result.append(ipv4_sockaddr_storage.begin(),
+                      ipv4_sockaddr_storage.end());
     }
     else [[unlikely]]
     {
         throw std::invalid_argument("Invalid source address");
     }
+
+    /* Destination Host */
+    if (this->_dest_host.is_v6())
+    {
+        const auto ipv6_sockaddr_storage = ipv6_to_sockaddr_storage(
+            this->_dest_host.to_v6(), this->_dest_port);
+        result.append(ipv6_sockaddr_storage.begin(),
+                      ipv6_sockaddr_storage.end());
+    }
+    else if (this->_dest_host.is_v4())
+    {
+        const auto ipv4_sockaddr_storage = ipv4_to_sockaddr_storage(
+            this->_dest_host.to_v4(), this->_dest_port);
+        result.append(ipv4_sockaddr_storage.begin(),
+                      ipv4_sockaddr_storage.end());
+    }
+    else [[unlikely]]
+    {
+        throw std::invalid_argument("Invalid destination address");
+    }
+
+    /* Seq */
+    auto seq = uint_to_array(to_bigendian(this->_sequence_number));
+    result.append(seq.begin(), seq.end());
+
+    /* PID */
+    auto pid = uint_to_array(to_bigendian(this->_pid));
+    result.append(pid.begin(), pid.end());
+
+    /* Seconds */
+    auto seconds = uint_to_array(to_bigendian(this->get_seconds().count()));
+    result.append(seconds.begin(), seconds.end());
+
+    /* Microseconds */
+    auto microseconds =
+        uint_to_array(to_bigendian(this->get_microseconds().count()));
+    result.append(microseconds.begin(), microseconds.end());
 
     return result;
 }
