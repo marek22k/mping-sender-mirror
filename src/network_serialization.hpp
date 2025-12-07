@@ -46,7 +46,7 @@ inline std::array<unsigned char, 128>
     const std::array<unsigned char, 2> port_bytes = uint_to_array(port);
     it = std::ranges::copy(port_bytes, it).out;
 
-    it += 4;
+    std::advance(it, 4);
 
     /* IPv6 */
     const std::array<unsigned char, 16> ipv6_bytes = address.to_bytes();
