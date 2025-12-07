@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef NETWORK_SERIALIZATION
 #define NETWORK_SERIALIZATION
 
