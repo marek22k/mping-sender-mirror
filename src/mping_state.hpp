@@ -38,7 +38,9 @@ namespace MPingSender
             void set_current_time() noexcept;
 
             [[nodiscard]] MPING_STATE_TYPE get_type() const noexcept;
+            void set_type(MPING_STATE_TYPE state) noexcept;
             [[nodiscard]] uint8_t get_ttl() const noexcept;
+            void get_ttl(uint8_t ttl) noexcept;
             [[nodiscard]] boost::asio::ip::address
                 get_src_host() const noexcept;
             [[nodiscard]] boost::asio::ip::address
