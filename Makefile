@@ -52,8 +52,10 @@ lizard: setup
 clangtidy: setup
 	ninja -C build clang-tidy || true
 
+# || true is a workaround for
+# https://github.com/boostorg/boost/issues/1107
 scanbuild: setup
-	ninja -C build scan-build
+	ninja -C build scan-build || true
 
 mdl: setup
 	meson compile -C build mdl
