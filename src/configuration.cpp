@@ -8,13 +8,13 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
     // clang-format off
     options.add_options()
       ("help", "Help screen")
-      ("log-level", boost::program_options::value<boost::log::trivial::severity_level>(&this->_log_level)->default_value(boost::log::trivial::info), "Log level. Options are trace, debug, info, warning, error and fatal. Defaults to info.")
-      ("bind-address", boost::program_options::value<std::string>(&this->_bind_address)->required(), "Address to bind")
-      ("bind-port", boost::program_options::value<uint16_t>(&this->_bind_port)->default_value(4321), "Port to bind. Defaults to 4321.")
+      ("log-level", boost::program_options::value<boost::log::trivial::severity_level>(&this->_log_level)->default_value(boost::log::trivial::info), "Log level. Valid options are trace, debug, info, warning, error and fatal. Defaults to info.")
+      ("bind-address", boost::program_options::value<std::string>(&this->_bind_address)->required(), "Address to which the UDP socket is bound. Required.")
+      ("bind-port", boost::program_options::value<uint16_t>(&this->_bind_port)->default_value(4321), "Port to which the UDP socket is bound. Defaults to 4321.")
       ("address", boost::program_options::value<std::string>(&this->_address)->default_value("ff2e::42"), "Address to send packets to. Defaults to ff2e::42")
-      ("port", boost::program_options::value<uint16_t>(&this->_port)->default_value(4321), "Port to send packets to")
-      ("ttl", boost::program_options::value<uint8_t>(&this->_ttl)->default_value(64), "TTL/Hoplimit the packets sends with (0-255). Defaults to 64.")
-      ("interface-name", boost::program_options::value<std::string>(&this->_interface_name)->required(), "TTL/Hoplimit the packets sends with")
+      ("port", boost::program_options::value<uint16_t>(&this->_port)->default_value(4321), "Address to which the packages are sent.")
+      ("ttl", boost::program_options::value<uint8_t>(&this->_ttl)->default_value(64), "TTTL or hop limit with which the packets are sent. Defaults to 64.")
+      ("interface-name", boost::program_options::value<std::string>(&this->_interface_name)->required(), "Name of the interface from which the packets are sent. Required.")
     ;
     // clang-format on
 
