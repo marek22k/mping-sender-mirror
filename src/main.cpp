@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
+#include "capability_managment.hpp"
 #include "configuration.hpp"
 #include "mping_sender.hpp"
 
@@ -15,6 +16,11 @@ int main(int argc, char * argv[])
 {
     try
     {
+#ifdef HAVE_LIBCAPNG
+        CapabilityManagment::check_for_capabilites();
+        CapabilityManagment::lock();
+        CapabilityManagment::drop_all_capabilies();
+#endif
         const auto args = std::span(argv, static_cast<std::size_t>(argc));
         MPingSender::Configuration config(args);
 
