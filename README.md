@@ -4,10 +4,12 @@ SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# Crazy traceroute
+# mping-sender
 
 [![pipeline badge](https://ci.codeberg.org/api/badges/13147/status.svg)](https://ci.codeberg.org/repos/13147)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8694/badge)](https://www.bestpractices.dev/projects/8694)
+
+mping-sender is a simple multicast transmitter that sends a UDP packet every second.
 
 What happens if a traceroute with the same TTL/hop limit is received from two different source addresses? How will they react?
 
