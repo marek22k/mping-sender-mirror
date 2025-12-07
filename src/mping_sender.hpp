@@ -5,6 +5,7 @@
 #ifndef MPING_SENDER
 #define MPING_SENDER
 
+#include <utility>
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 #include "mping_state.hpp"

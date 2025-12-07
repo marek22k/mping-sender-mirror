@@ -13,7 +13,7 @@ MPingSender::MulticastTxSocket::MulticastTxSocket(
     const boost::asio::ip::multicast::hops hops,
     const std::string& interface) :
     _socket(ex, endpoint.protocol()),
-    _error_handler(error_handler)
+    _error_handler(std::move(error_handler))
 {
     this->_socket.set_option(boost::asio::socket_base::reuse_address(true));
     this->_socket.set_option(boost::asio::ip::multicast::outbound_interface(

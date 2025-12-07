@@ -7,6 +7,7 @@
 
 #include <functional>
 #include <memory>
+#include <utility>
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 #include "posix_wrapper.hpp"
@@ -23,7 +24,7 @@ namespace MPingSender
                 const boost::asio::ip::multicast::hops hops,
                 const std::string& interface);
 
-            void send_packet(const std::string& data,
+            void send_packet(const std::string& message,
                              const boost::asio::ip::udp::endpoint endpoint);
 
         private:

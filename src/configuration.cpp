@@ -6,6 +6,7 @@
 
 using namespace MPingSender;
 
+// NOLINTBEGIN(cppcoreguidelines-pro-type-member-init)
 MPingSender::Configuration::Configuration(const std::span<char *> args)
 {
     boost::program_options::options_description options{"Configuration"};
@@ -28,7 +29,7 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
         boost::program_options::command_line_style::allow_long |
         boost::program_options::command_line_style::allow_sticky |
         boost::program_options::command_line_style::long_allow_next);
-    boost::program_options::parsed_options parsed_options = parser.run();
+    const boost::program_options::parsed_options parsed_options = parser.run();
 
     boost::program_options::variables_map vm;
     store(parsed_options, vm);
@@ -41,7 +42,7 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
                   << "Usage: mping-sender [configuration]" << std::endl
                   << std::endl
                   << options << std::endl;
-        std::exit(EXIT_SUCCESS);
+        std::exit(EXIT_SUCCESS); // NOLINT(concurrency-mt-unsafe)
     }
 
     notify(vm);
@@ -49,6 +50,8 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
     boost::log::core::get()->set_filter(boost::log::trivial::severity >=
                                         this->_log_level);
 }
+
+// NOLINTEND
 
 bool MPingSender::Configuration::get_help() const noexcept
 {

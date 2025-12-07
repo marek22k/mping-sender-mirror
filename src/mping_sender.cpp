@@ -19,7 +19,7 @@ MPingSender::Sender::Sender(
     uint8_t ttl,
     const std::string& interface) :
     _socket(ex,
-            network_error_handler,
+            std::move(network_error_handler),
             boost::asio::ip::udp::endpoint(
                 boost::asio::ip::make_address(bind_address), bind_port),
             static_cast<boost::asio::ip::multicast::hops>(ttl),
@@ -30,7 +30,7 @@ MPingSender::Sender::Sender(
            bind_port,
            boost::asio::ip::make_address(address),
            port),
-    _timer_error_handler(timer_error_handler),
+    _timer_error_handler(std::move(timer_error_handler)),
     _endpoint(boost::asio::ip::make_address(address), port),
     _timer(ex)
 {
