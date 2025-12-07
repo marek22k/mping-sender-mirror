@@ -8,7 +8,9 @@ MPingSender::MPingState::MPingState() :
     _type(MPING_STATE_TYPE::SENDER),
     _ttl(0),
     _src_host(),
+    _src_port(0),
     _dest_host(),
+    _dest_port(0),
     _sequence_number(0),
     _pid(0),
     _tv()
@@ -18,11 +20,15 @@ MPingSender::MPingState::MPingState() :
 MPingSender::MPingState::MPingState(const MPING_STATE_TYPE type,
                                     const uint8_t ttl,
                                     const boost::asio::ip::address src_host,
-                                    const boost::asio::ip::address dest_host) :
+                                    const uint32_t src_port,
+                                    const boost::asio::ip::address dest_host,
+                                    const uint32_t dest_port) :
     _type(type),
     _ttl(ttl),
     _src_host(src_host),
+    _src_port(src_port),
     _dest_host(dest_host),
+    _dest_port(dest_port),
     _sequence_number(0),
     _tv()
 {
@@ -38,14 +44,18 @@ MPingSender::MPingState::MPingState(
     const MPING_STATE_TYPE type,
     const uint8_t ttl,
     const boost::asio::ip::address src_host,
+    const uint32_t src_port,
     const boost::asio::ip::address dest_host,
+    const uint32_t dest_port,
     const uint32_t sequence_number,
     const uint32_t pid,
     const std::chrono::time_point<std::chrono::steady_clock> tv) :
     _type(type),
     _ttl(ttl),
     _src_host(src_host),
+    _src_port(src_port),
     _dest_host(dest_host),
+    _dest_port(dest_port),
     _sequence_number(sequence_number),
     _pid(pid),
     _tv(tv)
@@ -148,9 +158,19 @@ boost::asio::ip::address MPingSender::MPingState::get_src_host() const noexcept
     return this->_src_host;
 }
 
+uint32_t MPingSender::MPingState::get_src_port() const noexcept
+{
+    return this->_src_port;
+}
+
 boost::asio::ip::address MPingSender::MPingState::get_dest_host() const noexcept
 {
     return this->_dest_host;
+}
+
+uint32_t MPingSender::MPingState::get_dest_port() const noexcept
+{
+    return this->_dest_port;
 }
 
 uint32_t MPingSender::MPingState::get_sequence_number() const noexcept

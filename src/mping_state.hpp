@@ -24,15 +24,19 @@ namespace MPingSender
             MPingState(const MPING_STATE_TYPE type,
                        const uint8_t ttl,
                        const boost::asio::ip::address src_host,
-                       const boost::asio::ip::address dest_host);
+                       const uint32_t src_port,
+                       const boost::asio::ip::address dest_host,
+                       const uint32_t dest_port);
             MPingState(
                 const MPING_STATE_TYPE type,
                 const uint8_t ttl,
                 const boost::asio::ip::address src_host,
+                const uint32_t src_port,
                 const boost::asio::ip::address dest_host,
-                const uint32_t _sequence_number,
-                const uint32_t _pid,
-                const std::chrono::time_point<std::chrono::steady_clock> _tv);
+                const uint32_t dest_port,
+                const uint32_t sequence_number,
+                const uint32_t pid,
+                const std::chrono::time_point<std::chrono::steady_clock> tv);
 
             void next_seq_no() noexcept;
             void set_current_time() noexcept;
@@ -44,8 +48,10 @@ namespace MPingSender
             void get_ttl(uint8_t ttl) noexcept;
             [[nodiscard]] boost::asio::ip::address
                 get_src_host() const noexcept;
+            [[nodiscard]] uint32_t get_src_port() const noexcept;
             [[nodiscard]] boost::asio::ip::address
                 get_dest_host() const noexcept;
+            [[nodiscard]] uint32_t get_dest_port() const noexcept;
             [[nodiscard]] uint32_t get_sequence_number() const noexcept;
             [[nodiscard]] uint32_t get_pid() const noexcept;
             [[nodiscard]] std::chrono::time_point<std::chrono::steady_clock>
@@ -63,8 +69,7 @@ namespace MPingSender
             uint32_t _dest_port;
             uint32_t _sequence_number;
             uint32_t _pid;
-            std::chrono::time_point<std::chrono::steady_clock>
-                _tv;
+            std::chrono::time_point<std::chrono::steady_clock> _tv;
     };
 } // namespace MPingSender
 
