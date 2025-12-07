@@ -28,14 +28,16 @@ sources = files(
     'src/mping_sender.cpp',
     'src/multicast_tx_socket.cpp',
     'src/mping_state.cpp',
-    'src/posix_wrapper.cpp'
+    'src/posix_wrapper.cpp',
+    'src/configuration.cpp'
 )
 headers = files(
     'src/mping_sender.hpp',
     'src/multicast_tx_socket.hpp',
     'src/mping_state.hpp',
     'src/posix_wrapper.hpp',
-    'src/network_serialization.hpp'
+    'src/network_serialization.hpp',
+    'src/configuration.hpp'
 )
 tests_sources = files(
     'tests/mping_state_test.cpp'
@@ -59,7 +61,7 @@ cpp_compiler.has_header('net/if.h', required: true)
 cpp_compiler.has_function('if_nametoindex', prefix: '#include <net/if.h>', required: true)
 
 # Workaround for https://github.com/boostorg/process/issues/494#issuecomment-3392312248
-boost_dep = dependency('boost', modules: ['log'], required: true, include_type: 'system')
+boost_dep = dependency('boost', modules: ['log', 'program_options'], required: true, include_type: 'system')
 
 gtest_dep = dependency('gtest', main: true, required: false, include_type: 'system')
 

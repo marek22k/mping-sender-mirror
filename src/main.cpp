@@ -2,16 +2,22 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include <iostream>
+#include <span>
 #include <stdexcept>
 #include <cstdlib>
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
+#include "configuration.hpp"
 #include "mping_sender.hpp"
 
-int main()
+int main(int argc, char * argv[])
 {
     try
     {
+        const auto args = std::span(argv, static_cast<std::size_t>(argc));
+        MPingSender::Configuration config(args);
+
         boost::asio::io_context io;
 
         std::function<void(boost::system::error_code)> error_handler =
@@ -22,12 +28,12 @@ int main()
         const MPingSender::Sender sender(io.get_executor(),
                                          error_handler,
                                          error_handler,
-                                         "fd00:8e13:ce5d:e::1",
-                                         4321,
-                                         "ff2e::42",
-                                         4321,
-                                         32,
-                                         "lab-client01");
+                                         config.get_bind_address(),
+                                         config.get_bind_port(),
+                                         config.get_address(),
+                                         config.get_port(),
+                                         config.get_ttl(),
+                                         config.get_interface_name());
 
         io.run();
     }
