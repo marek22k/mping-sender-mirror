@@ -29,8 +29,7 @@ constexpr std::array<unsigned char, sizeof(T)> uint_to_array(const T i)
 }
 
 inline std::array<unsigned char, 128>
-    ipv6_to_sockaddr_storage(const boost::asio::ip::address_v6 address,
-                             const uint16_t port)
+    ipv6_to_sockaddr_storage(boost::asio::ip::address_v6 address, uint16_t port)
 {
     std::array<unsigned char, 128> result;
     result.fill('\0');
@@ -46,6 +45,8 @@ inline std::array<unsigned char, 128>
     /* P */
     const std::array<unsigned char, 2> port_bytes = uint_to_array(port);
     it = std::ranges::copy(port_bytes, it).out;
+
+    it += 4;
 
     /* IPv6 */
     const std::array<unsigned char, 16> ipv6_bytes = address.to_bytes();
