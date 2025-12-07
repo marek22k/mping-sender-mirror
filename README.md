@@ -7,7 +7,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 # mping-sender
 
 [![pipeline badge](https://ci.codeberg.org/api/badges/13147/status.svg)](https://ci.codeberg.org/repos/13147)
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8694/badge)](https://www.bestpractices.dev/projects/8694)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11574/badge)](https://www.bestpractices.dev/projects/11574)
 
 mping-sender is a simple multicast transmitter that sends a UDP packet every second.
 
