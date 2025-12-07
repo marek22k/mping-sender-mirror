@@ -6,7 +6,7 @@
 
 using namespace std::chrono_literals;
 
-TEST(MPingState, InitializeEmpty)
+TEST(MPingStateTest, InitializeEmpty)
 {
     MPingSender::MPingState state;
     EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
@@ -19,7 +19,7 @@ TEST(MPingState, InitializeEmpty)
     EXPECT_EQ(state.get_microseconds(), 0s);
 }
 
-TEST(MPingState, InitializeDefault)
+TEST(MPingStateTest, InitializeDefault)
 {
     const auto addr1(boost::asio::ip::make_address(
         "fd72:807b:8257:bd92:80a1:32a0:f13d:b46c"));
@@ -47,7 +47,7 @@ TEST(MPingState, InitializeDefault)
               MPingSender::MPING_STATE_TYPE::RECEIVER);
 }
 
-TEST(MPingState, InitializeWithCustomValues)
+TEST(MPingStateTest, InitializeWithCustomValues)
 {
     const auto addr1(boost::asio::ip::make_address(
         "fd72:807b:8257:bd92:80a1:32a0:f13d:b46c"));
@@ -93,7 +93,7 @@ TEST(MPingState, InitializeWithCustomValues)
               MPingSender::MPING_STATE_TYPE::RECEIVER);
 }
 
-TEST(MPingState, NextSeqNoIncrement)
+TEST(MPingStateTest, NextSeqNoIncrement)
 {
     MPingSender::MPingState state;
     EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
@@ -128,7 +128,7 @@ TEST(MPingState, NextSeqNoIncrement)
     EXPECT_EQ(state.get_microseconds(), 0s);
 }
 
-TEST(MPingState, NextSeqNoIncrementMax)
+TEST(MPingStateTest, NextSeqNoIncrementMax)
 {
     const auto addr1(boost::asio::ip::make_address(
         "fd72:807b:8257:bd92:80a1:32a0:f13d:b46c"));
