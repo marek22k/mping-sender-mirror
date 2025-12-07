@@ -123,6 +123,7 @@ MPing packet =
     |                            0                                  |
     |                            0                                  |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    10 = 10 (little endian)
     P = Port
 
     IPv4 Host =
@@ -134,6 +135,9 @@ MPing packet =
     |                            0                                  |
     |                            0                                  |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    2 = 2 (little endian)
+
+    otherwise bigendian
 */
 
 std::string MPingSender::MPingState::serialize() const
