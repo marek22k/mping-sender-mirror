@@ -27,15 +27,17 @@ main_file = files('src/main.cpp')
 sources = files(
     'src/mping_sender.cpp',
     'src/multicast_tx_socket.cpp',
+    'src/mping_state.cpp',
     'src/posix_wrapper.cpp'
 )
 headers = files(
     'src/mping_sender.hpp',
     'src/multicast_tx_socket.hpp',
+    'src/mping_state.hpp',
     'src/posix_wrapper.hpp'
 )
 tests_sources = files(
-    
+    'tests/mping_state_test.cpp'
 )
 markdown_files = files(
     'BUILDING.md',
