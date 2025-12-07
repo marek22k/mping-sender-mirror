@@ -93,6 +93,39 @@ TEST(MPingStateTest, InitializeWithCustomValues)
               MPingSender::MPING_STATE_TYPE::RECEIVER);
 }
 
+TEST(MPingStateTest, Serialization)
+{
+    const auto addr1(boost::asio::ip::make_address("fd00:8e13:ce5d:e::1"));
+    const auto addr2(boost::asio::ip::make_address("ff2e::42"));
+    ASSERT_NE(addr1, addr2);
+
+    constexpr uint8_t ttl = 1;
+    constexpr uint32_t seq_no = 3;
+    constexpr uint32_t pid = 417'936;
+
+    constexpr auto seconds = std::chrono::seconds(163'169);
+    constexpr auto microseconds = std::chrono::microseconds(553'889);
+    const auto time =
+        std::chrono::steady_clock::time_point(seconds + microseconds);
+
+    MPingSender::MPingState state(MPingSender::MPING_STATE_TYPE::SENDER,
+                                  ttl,
+                                  addr1,
+                                  addr2,
+                                  seq_no,
+                                  pid,
+                                  time);
+    EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
+    EXPECT_EQ(state.get_ttl(), ttl);
+    EXPECT_EQ(state.get_src_host(), addr1);
+    EXPECT_EQ(state.get_dest_host(), addr2);
+    EXPECT_EQ(state.get_sequence_number(), seq_no);
+    EXPECT_EQ(state.get_pid(), pid);
+    EXPECT_EQ(state.get_tv(), time);
+    EXPECT_EQ(state.get_seconds(), seconds);
+    EXPECT_EQ(state.get_microseconds(), microseconds);
+}
+
 TEST(MPingStateTest, NextSeqNoIncrement)
 {
     MPingSender::MPingState state;
