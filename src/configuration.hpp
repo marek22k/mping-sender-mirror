@@ -16,7 +16,7 @@ namespace MPingSender
     class Configuration
     {
         public:
-            Configuration(const std::span<char *> args);
+            explicit Configuration(const std::span<char *> args);
 
             [[nodiscard]] bool get_help() const noexcept;
             [[nodiscard]] boost::log::trivial::severity_level

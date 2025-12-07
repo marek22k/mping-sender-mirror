@@ -21,14 +21,14 @@ namespace MPingSender
     class MPingState
     {
         public:
-            MPingState();
-            MPingState(const MPING_STATE_TYPE type,
-                       const uint8_t ttl,
-                       const boost::asio::ip::address src_host,
-                       const uint16_t src_port,
-                       const boost::asio::ip::address dest_host,
-                       const uint16_t dest_port);
-            MPingState(
+            explicit MPingState();
+            explicit MPingState(const MPING_STATE_TYPE type,
+                                const uint8_t ttl,
+                                const boost::asio::ip::address src_host,
+                                const uint16_t src_port,
+                                const boost::asio::ip::address dest_host,
+                                const uint16_t dest_port);
+            explicit MPingState(
                 const MPING_STATE_TYPE type,
                 const uint8_t ttl,
                 const boost::asio::ip::address src_host,

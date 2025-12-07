@@ -12,7 +12,7 @@ namespace MPingSender
     class MulticastTxSocket
     {
         public:
-            MulticastTxSocket(
+            explicit MulticastTxSocket(
                 boost::asio::any_io_executor ex,
                 std::function<void(boost::system::error_code)> error_handler,
                 const boost::asio::ip::udp::endpoint& endpoint,

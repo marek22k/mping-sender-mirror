@@ -106,7 +106,7 @@ int main(int argc, char * argv[])
         std::function<void(boost::system::error_code)> error_handler =
             [](boost::system::error_code)
         {
-            std::runtime_error("Fatal error");
+            throw std::runtime_error("Fatal error");
         };
         const MPingSender::Sender sender(io.get_executor(),
                                          error_handler,
