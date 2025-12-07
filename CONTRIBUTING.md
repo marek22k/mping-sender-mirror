@@ -15,7 +15,7 @@ I am happy to receive any form of friendly feedback. You can use the issue track
 Unfortunately, it can always happen that a program does not behave as desired. In such cases I am happy to receive bug reports via the issue tracker. If you create a bug report please state the following:
 
 - Version used
-- Configuration file
+- Configuration options
 - Environment (e.g. operating system)
 - Output of the program at log level `trace`
 
@@ -41,7 +41,7 @@ I reserve the right to reject pull requests.
 
 ## Platforms
 
-crazytrace can be found on both [Codeberg](https://codeberg.org/mark22k/crazytrace) and [NotABug.org](https://notabug.org/mark22k/crazytrace). You are welcome to submit your issues or pull requests on both platforms.
+mping-sender can be found on both [Codeberg](https://codeberg.org/mark22k/mping-sender) and [NotABug.org](https://notabug.org/mark22k/mping-sender). You are welcome to submit your issues or pull requests on both platforms.
 
 ## Dealing with each other
 

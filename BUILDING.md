@@ -6,17 +6,17 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Building
 
-crazytrace uses meson as a build system. However, there is also a Makefile that contains frequently used routines.
+mping-sender uses meson as a build system. However, there is also a Makefile that contains frequently used routines.
 
 ## Dependencies
 
 The libraries used are listed in the README. To install them on Debian, the following command can be used:
 
 ```
-$ sudo apt-get --yes install build-essential git meson ninja-build libboost1.88-all-dev libyaml-cpp-dev libtins-dev
+$ sudo apt-get --yes install build-essential git meson ninja-build libboost1.88-all-dev
 ```
 
-The following packages are required for the additional security features of crazytrace:
+The following packages are required for the additional security features of mping-sender:
 
 ```
 $ sudo apt-get --yes install libseccomp-dev libcap-ng-dev
@@ -36,37 +36,18 @@ The following packages are required to build the Debian package:
 $ sudo apt-get --yes install debhelper debhelper-compat config-package-dev clang-tidy cppcheck flawfinder
 ```
 
-Furthermore, libtuntap is required, which unfortunately does not have a development package in Debian.
+## Download mping-sender
 
-### Building and installing libtuntap
-
-The following packages are required to build libtuntap:
+To build mping-sender, the latest version can be obtained via Git:
 
 ```
-$ sudo apt-get --yes install build-essential git cmake
-```
-
-After that, libtuntap can be built like a normal cmake project:
-
-```
-$ git clone --depth 1 https://github.com/LaKabane/libtuntap.git
-$ cmake -DCMAKE_BUILD_TYPE=Release -B build_libtuntap -S libtuntap
-$ cmake --build build_libtuntap
-$ cmake --install build_libtuntap --prefix /usr
-```
-
-## Download crazytrace
-
-To build crazytrace, the latest version can be obtained via Git:
-
-```
-$ git clone https://codeberg.org/mark22k/crazytrace.git
-$ cd crazytrace
+$ git clone https://codeberg.org/mark22k/mping-sender.git
+$ cd mping-sender
 ```
 
 ## Building with the Makefile
 
-If you want to build crazytrace without further settings you can execute `make` normally:
+If you want to build mping-sender without further settings you can execute `make` normally:
 
 ```
 $ make
@@ -139,13 +120,13 @@ $ make clangformat
 
 (To execute clangformat, `ninja-build` is required.)
 
-### Getting crazytrace
+### Getting mping-sender
 
-The executable file is located at `./build/crazytrace`.
+The executable file is located at `./build/mping-sender`.
 
 ## Building with meson and ninja
 
-It is also possible to build crazytrace without the Makefile wrapper.
+It is also possible to build mping-sender without the Makefile wrapper.
 
 To do this, the Meson project can be set up first:
 
@@ -153,13 +134,13 @@ To do this, the Meson project can be set up first:
 $ meson setup build
 ```
 
-Then crazytrace can be built:
+Then mping-sender can be built:
 
 ```
 $ meson compile -C build
 ```
 
-Alternatively, crazytrace can be compiled using the ninja build system:
+Alternatively, mping-sender can be compiled using the ninja build system:
 
 ```
 $ ninja -C build
@@ -181,7 +162,7 @@ $ ninja -C build test
 
 ### Building with Sanitizer
 
-To build crazytrace with Sanitizer, you can set up the project with the following command:
+To build mping-sender with Sanitizer, you can set up the project with the following command:
 
 ```
 $ meson setup --reconfigure --debug -Db_sanitize=address,undefined build
@@ -191,7 +172,7 @@ All sanitizers supported by the compiler or Meson are available. The exact ones 
 
 ### Install
 
-crazytrace can be installed with the following command:
+mping-sender can be installed with the following command:
 
 ```
 $ meson install -C build
@@ -247,13 +228,13 @@ $ ninja -C build clang-format
 
 I am currently not aware of any way to run clang-format via meson without ninja.
 
-### Getting crazytrace
+### Getting mping-sender
 
-The executable file is available under the name `crazytrace` in the build directory.
+The executable file is available under the name `mping-sender` in the build directory.
 
 ## Building the Debian package without Makefile-wrapper
 
-To build the binary crazytrace Debian package, the following command can be executed:
+To build the binary mping-sender Debian package, the following command can be executed:
 
 ```
 $ dpkg-buildpackage -b

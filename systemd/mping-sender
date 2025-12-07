@@ -1,0 +1,8 @@
+# Address to which the UDP socket is bound.
+BIND_ADDRESS=""
+
+# Name of the interface from which the packets are sent.
+INTERFACE_NAME=""
+
+# Additional arguments
+ARGS=""

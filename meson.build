@@ -269,6 +269,10 @@ if get_option('install_systemd_unit')
         'systemd/crazytrace@.service',
         install_dir: 'lib/systemd/system'
     )
+    install_data(
+        'systemd/mping-sender',
+        install_dir: '/etc/default'
+    )
 endif
 
 if get_option('install_apparmor_profile')

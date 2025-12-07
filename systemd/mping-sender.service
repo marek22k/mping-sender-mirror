@@ -1,6 +1,6 @@
 [Unit]
-Description=crazytrace %I
-Documentation=https://codeberg.org/mark22k/crazytrace
+Description=mping-sender
+Documentation=https://codeberg.org/mark22k/mping-sender
 
 [Service]
 RemoveIPC=true
@@ -10,7 +10,7 @@ SystemCallArchitectures=native
 MemoryDenyWriteExecute=true
 LockPersonality=true
 RestrictNamespaces=true
-RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK
+RestrictAddressFamilies=AF_INET AF_INET6
 RestrictRealtime=true
 ProtectKernelTunables=true
 ProtectHostname=true
@@ -25,11 +25,11 @@ PrivateTmp=true
 ProcSubset=pid
 SystemCallFilter=~@clock @cpu-emulation @debug @module @mount @obsolete @raw-io @reboot @resources @swap
 
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_SETPCAP
-AmbientCapabilities=CAP_NET_ADMIN CAP_SETPCAP
-ConfigurationDirectory=crazytrace
+CapabilityBoundingSet=CAP_SETPCAP
+AmbientCapabilities=CAP_SETPCAP
 
-ExecStart=/usr/bin/crazytrace %E/crazytrace/%i.yaml
+EnvironmentFile=%E/default/mping-sender
+ExecStart=/usr/bin/mping-sender --bind-address "$BIND_ADDRESS" --interface-name "$INTERFACE_NAME" "$ARGS"
 Restart=on-failure
 TimeoutStopSec=5
 
