@@ -1,8 +1,8 @@
 #include "mping_sender.hpp"
-#include <boost/asio/ip/address.hpp>
-#include <boost/log/trivial.hpp>
 
 using namespace MPingSender;
+
+static_assert(sizeof(boost::asio::ip::multicast::hops) >= sizeof(uint8_t));
 
 MPingSender::Sender::Sender(
     boost::asio::any_io_executor ex,
@@ -12,14 +12,20 @@ MPingSender::Sender::Sender(
     const int bind_port,
     const std::string& address,
     const int port,
-    boost::asio::ip::multicast::hops hops,
+    uint8_t hops,
     const std::string& interface) :
     _socket(ex,
             network_error_handler,
             boost::asio::ip::udp::endpoint(
                 boost::asio::ip::make_address(bind_address), bind_port),
-            hops,
+            static_cast<boost::asio::ip::multicast::hops>(hops),
             interface),
+    _state(MPING_STATE_TYPE::SENDER,
+           hops,
+           boost::asio::ip::make_address(bind_address),
+           bind_port,
+           boost::asio::ip::make_address(address),
+           port),
     _timer_error_handler(timer_error_handler),
     _endpoint(boost::asio::ip::make_address(address), port),
     _timer(ex)
@@ -40,17 +46,16 @@ void MPingSender::Sender::schedule_send()
             }
             else
             {
-                this->send_packet();
                 this->schedule_send();
+                this->send_packet();
             }
         });
 }
 
 void MPingSender::Sender::send_packet()
 {
-    std::string message = "test";
-    BOOST_LOG_TRIVIAL(trace)
-        << "Sending packet to address " << this->_endpoint.address() << " port "
-        << this->_endpoint.port();
+    _state.set_current_time();
+    const std::string message = _state.serialize();
+    _state.next_seq_no();
     this->_socket.send_packet(message, this->_endpoint);
 }

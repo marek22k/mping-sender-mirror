@@ -3,6 +3,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
+#include "mping_state.hpp"
 #include "multicast_tx_socket.hpp"
 
 namespace MPingSender
@@ -19,7 +20,7 @@ namespace MPingSender
                    const int bind_port,
                    const std::string& address,
                    const int port,
-                   boost::asio::ip::multicast::hops hops,
+                   uint8_t hops,
                    const std::string& interface);
 
         private:
@@ -27,6 +28,7 @@ namespace MPingSender
             void send_packet();
 
             MulticastTxSocket _socket;
+            MPingState _state;
             std::function<void(boost::system::error_code)> _timer_error_handler;
             boost::asio::ip::udp::endpoint _endpoint;
             boost::asio::steady_timer _timer;

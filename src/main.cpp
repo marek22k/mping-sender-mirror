@@ -19,16 +19,15 @@ int main()
         {
             std::runtime_error("Fatal error");
         };
-        const MPingSender::Sender sender(
-            io.get_executor(),
-            error_handler,
-            error_handler,
-            "fd00:8e13:ce5d:e::1",
-            4321,
-            "ff2e::42",
-            4321,
-            static_cast<boost::asio::ip::multicast::hops>(32),
-            "lab-client01");
+        const MPingSender::Sender sender(io.get_executor(),
+                                         error_handler,
+                                         error_handler,
+                                         "fd00:8e13:ce5d:e::1",
+                                         4321,
+                                         "ff2e::42",
+                                         4321,
+                                         32,
+                                         "lab-client01");
 
         io.run();
     }
