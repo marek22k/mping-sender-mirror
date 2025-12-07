@@ -6,6 +6,7 @@
 #include <random>
 #include <cstdint>
 #include <boost/asio.hpp>
+#include "network_serialization.hpp"
 
 #define MPING_STATE_VERSION "2.0"
 
@@ -24,16 +25,16 @@ namespace MPingSender
             MPingState(const MPING_STATE_TYPE type,
                        const uint8_t ttl,
                        const boost::asio::ip::address src_host,
-                       const uint32_t src_port,
+                       const uint16_t src_port,
                        const boost::asio::ip::address dest_host,
-                       const uint32_t dest_port);
+                       const uint16_t dest_port);
             MPingState(
                 const MPING_STATE_TYPE type,
                 const uint8_t ttl,
                 const boost::asio::ip::address src_host,
-                const uint32_t src_port,
+                const uint16_t src_port,
                 const boost::asio::ip::address dest_host,
-                const uint32_t dest_port,
+                const uint16_t dest_port,
                 const uint32_t sequence_number,
                 const uint32_t pid,
                 const std::chrono::time_point<std::chrono::steady_clock> tv);
@@ -48,10 +49,10 @@ namespace MPingSender
             void get_ttl(uint8_t ttl) noexcept;
             [[nodiscard]] boost::asio::ip::address
                 get_src_host() const noexcept;
-            [[nodiscard]] uint32_t get_src_port() const noexcept;
+            [[nodiscard]] uint16_t get_src_port() const noexcept;
             [[nodiscard]] boost::asio::ip::address
                 get_dest_host() const noexcept;
-            [[nodiscard]] uint32_t get_dest_port() const noexcept;
+            [[nodiscard]] uint16_t get_dest_port() const noexcept;
             [[nodiscard]] uint32_t get_sequence_number() const noexcept;
             [[nodiscard]] uint32_t get_pid() const noexcept;
             [[nodiscard]] std::chrono::time_point<std::chrono::steady_clock>
@@ -64,9 +65,9 @@ namespace MPingSender
             MPING_STATE_TYPE _type;
             uint8_t _ttl;
             boost::asio::ip::address _src_host;
-            uint32_t _src_port;
+            uint16_t _src_port;
             boost::asio::ip::address _dest_host;
-            uint32_t _dest_port;
+            uint16_t _dest_port;
             uint32_t _sequence_number;
             uint32_t _pid;
             std::chrono::time_point<std::chrono::steady_clock> _tv;

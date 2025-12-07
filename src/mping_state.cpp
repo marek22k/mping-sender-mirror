@@ -1,6 +1,8 @@
 #include "mping_state.hpp"
 #include <chrono>
 #include <limits>
+#include <stdexcept>
+#include "network_serialization.hpp"
 
 using namespace MPingSender;
 
@@ -20,9 +22,9 @@ MPingSender::MPingState::MPingState() :
 MPingSender::MPingState::MPingState(const MPING_STATE_TYPE type,
                                     const uint8_t ttl,
                                     const boost::asio::ip::address src_host,
-                                    const uint32_t src_port,
+                                    const uint16_t src_port,
                                     const boost::asio::ip::address dest_host,
-                                    const uint32_t dest_port) :
+                                    const uint16_t dest_port) :
     _type(type),
     _ttl(ttl),
     _src_host(src_host),
@@ -44,9 +46,9 @@ MPingSender::MPingState::MPingState(
     const MPING_STATE_TYPE type,
     const uint8_t ttl,
     const boost::asio::ip::address src_host,
-    const uint32_t src_port,
+    const uint16_t src_port,
     const boost::asio::ip::address dest_host,
-    const uint32_t dest_port,
+    const uint16_t dest_port,
     const uint32_t sequence_number,
     const uint32_t pid,
     const std::chrono::time_point<std::chrono::steady_clock> tv) :
@@ -116,7 +118,7 @@ MPing packet =
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |10 | P |   0   | IPv6 Address                  | 0             |
+    |10 | P | IPv6 Address                  | 0                     |
     |                            0                                  |
     |                            0                                  |
     |                            0                                  |
@@ -136,11 +138,63 @@ MPing packet =
 
 std::string MPingSender::MPingState::serialize() const
 {
+    std::string result;
+    result.reserve(288);
+
+    /* Ver */
     constexpr std::array<char, 4> mstate_version =
         std::to_array(MPING_STATE_VERSION);
-    std::string result;
-    result.resize(288);
-    return "";
+    result.append(mstate_version.begin(), mstate_version.end());
+
+    /* T */
+    result.push_back(static_cast<char>(this->_type));
+
+    /* L */
+    auto ttl = uint_to_array(this->_ttl);
+    result.append(ttl.begin(), ttl.end());
+
+    constexpr std::array<char, 2> two_null_characters = {'\0', '\0'};
+    result.append(two_null_characters.begin(), two_null_characters.end());
+
+    if (this->_src_host.is_v6())
+    {
+        /* 10 */
+        constexpr uint16_t ipv6_type_int = 10;
+        constexpr std::array<unsigned char, 2> ipv6_type =
+            uint_to_array(ipv6_type_int);
+        result.append(ipv6_type.begin(), ipv6_type.end());
+
+        /* P */
+        const std::array<unsigned char, 2> port =
+            uint_to_array(this->_src_port);
+        result.append(port.begin(), port.end());
+
+        const std::array<unsigned char, 16> ipv6_bytes =
+            this->_src_host.to_v6().to_bytes();
+        result.append(ipv6_bytes.begin(), ipv6_bytes.end());
+
+        constexpr std::array<unsigned char, 108> padding = {
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+            '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'};
+        result.append(padding.begin(), padding.end());
+    }
+    else if (this->_src_host.is_v4())
+    {
+    }
+    else [[unlikely]]
+    {
+        throw std::invalid_argument("Invalid source address");
+    }
+
+    return result;
 }
 
 MPING_STATE_TYPE MPingSender::MPingState::get_type() const noexcept
@@ -158,7 +212,7 @@ boost::asio::ip::address MPingSender::MPingState::get_src_host() const noexcept
     return this->_src_host;
 }
 
-uint32_t MPingSender::MPingState::get_src_port() const noexcept
+uint16_t MPingSender::MPingState::get_src_port() const noexcept
 {
     return this->_src_port;
 }
@@ -168,7 +222,7 @@ boost::asio::ip::address MPingSender::MPingState::get_dest_host() const noexcept
     return this->_dest_host;
 }
 
-uint32_t MPingSender::MPingState::get_dest_port() const noexcept
+uint16_t MPingSender::MPingState::get_dest_port() const noexcept
 {
     return this->_dest_port;
 }

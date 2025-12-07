@@ -34,7 +34,8 @@ headers = files(
     'src/mping_sender.hpp',
     'src/multicast_tx_socket.hpp',
     'src/mping_state.hpp',
-    'src/posix_wrapper.hpp'
+    'src/posix_wrapper.hpp',
+    'src/network_serialization.hpp'
 )
 tests_sources = files(
     'tests/mping_state_test.cpp'

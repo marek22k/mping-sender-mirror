@@ -60,8 +60,8 @@ TEST(MPingStateTest, InitializeWithCustomValues)
         "fd72:807b:8257:bd92:80a1:32a0:f13d:b46d"));
     ASSERT_NE(addr1, addr2);
 
-    constexpr uint32_t src_port = 2252;
-    constexpr uint32_t dest_port = 7597;
+    constexpr uint16_t src_port = 2252;
+    constexpr uint16_t dest_port = 7597;
     ASSERT_NE(src_port, dest_port);
 
     constexpr uint8_t ttl = 45;
@@ -114,8 +114,8 @@ TEST(MPingStateTest, Serialization)
     const auto addr2(boost::asio::ip::make_address("ff2e::42"));
     ASSERT_NE(addr1, addr2);
 
-    constexpr uint32_t src_port = 0;
-    constexpr uint32_t dest_port = 0;
+    constexpr uint16_t src_port = 0;
+    constexpr uint16_t dest_port = 0;
 
     constexpr uint8_t ttl = 1;
     constexpr uint32_t seq_no = 3;
@@ -147,18 +147,17 @@ TEST(MPingStateTest, Serialization)
     EXPECT_EQ(state.get_seconds(), seconds);
     EXPECT_EQ(state.get_microseconds(), microseconds);
 
-    EXPECT_EQ(
-        state.serialize(),
+    const std::string packet(
         "2."
         "0\000s\001\000\000\n\000\000\000\000\000\000\000\375\000\216\023\316]"
         "\000\016\000\000\000\000\000\000\000\001\000\000\000\000\000\000\000"
-        "\000\000\000\000\000\n\000\000\000\000\000\000\000\377\377\377\377\377"
-        "\377\377\377\377\377\377\377\377\377\377\377\000\000\000\000\000\000"
+        "\000\000\000\000\000\n\000\000\000\000\000\000\000\000\000\000\000\000"
+        "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\n\000\020\341\000\000\000"
-        "\000\377."
+        "\000\000."
         "\000\000\000\000\000\000\000\000\000\000\000\000\000B\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
@@ -167,7 +166,9 @@ TEST(MPingStateTest, Serialization)
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
         "\000\003\220`\006\000\000\000\000\000\000\002}"
-        "a\000\000\000\000\000\bs\241");
+        "a\000\000\000\000\000\bs\241",
+        288);
+    EXPECT_EQ(state.serialize(), packet);
 }
 
 TEST(MPingStateTest, NextSeqNoIncrement)
@@ -213,8 +214,8 @@ TEST(MPingStateTest, NextSeqNoIncrementMax)
         "fd72:807b:8257:bd92:80a1:32a0:f13d:b46d"));
     ASSERT_NE(addr1, addr2);
 
-    constexpr uint32_t src_port = 2252;
-    constexpr uint32_t dest_port = 7597;
+    constexpr uint16_t src_port = 2252;
+    constexpr uint16_t dest_port = 7597;
     ASSERT_NE(src_port, dest_port);
 
     constexpr uint8_t ttl = 45;
