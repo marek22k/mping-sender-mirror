@@ -37,11 +37,20 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
     }
 
     notify(vm);
+
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >=
+                                        this->_log_level);
 }
 
 bool MPingSender::Configuration::get_help() const noexcept
 {
     return this->_help;
+}
+
+boost::log::trivial::severity_level
+    MPingSender::Configuration::get_log_level() const noexcept
+{
+    return this->_log_level;
 }
 
 std::string MPingSender::Configuration::get_bind_address() const noexcept
