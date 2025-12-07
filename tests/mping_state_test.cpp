@@ -92,3 +92,38 @@ TEST(MPingState, InitializeWithCustomValues)
     EXPECT_EQ(receiver_state.get_type(),
               MPingSender::MPING_STATE_TYPE::RECEIVER);
 }
+
+TEST(MPingState, NextSeqNo)
+{
+    MPingSender::MPingState state;
+    EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
+    EXPECT_EQ(state.get_ttl(), 0);
+    EXPECT_TRUE(state.get_src_host().is_unspecified());
+    EXPECT_TRUE(state.get_dest_host().is_unspecified());
+    EXPECT_EQ(state.get_sequence_number(), 0);
+    EXPECT_EQ(state.get_pid(), 0);
+    EXPECT_EQ(state.get_seconds(), 0s);
+    EXPECT_EQ(state.get_microseconds(), 0s);
+
+    state.next_seq_no();
+
+    EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
+    EXPECT_EQ(state.get_ttl(), 0);
+    EXPECT_TRUE(state.get_src_host().is_unspecified());
+    EXPECT_TRUE(state.get_dest_host().is_unspecified());
+    EXPECT_EQ(state.get_sequence_number(), 1);
+    EXPECT_EQ(state.get_pid(), 0);
+    EXPECT_EQ(state.get_seconds(), 0s);
+    EXPECT_EQ(state.get_microseconds(), 0s);
+
+    state.next_seq_no();
+
+    EXPECT_EQ(state.get_type(), MPingSender::MPING_STATE_TYPE::SENDER);
+    EXPECT_EQ(state.get_ttl(), 0);
+    EXPECT_TRUE(state.get_src_host().is_unspecified());
+    EXPECT_TRUE(state.get_dest_host().is_unspecified());
+    EXPECT_EQ(state.get_sequence_number(), 2);
+    EXPECT_EQ(state.get_pid(), 0);
+    EXPECT_EQ(state.get_seconds(), 0s);
+    EXPECT_EQ(state.get_microseconds(), 0s);
+}
