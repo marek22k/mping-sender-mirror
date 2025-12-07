@@ -79,8 +79,8 @@ Here is how the program works:
 1. reading the command line parameters
 2. setting the log level
 3. output of the versions
-5. creation of the UDP socket
-7. starting timer
+4. creation of the UDP socket
+5. starting timer
 
 The following happens when the timer triggers:
 
