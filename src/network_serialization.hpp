@@ -88,7 +88,7 @@ namespace NetworkSerialization
 
         /* IPv6 */
         const std::array<unsigned char, 16> ipv6_bytes = address.to_bytes();
-        it = std::ranges::copy(ipv6_bytes, it).out;
+        /* it = */ std::ranges::copy(ipv6_bytes, it).out;
 
         return result;
     }

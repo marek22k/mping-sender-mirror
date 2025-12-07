@@ -47,8 +47,10 @@ flawfinder: setup
 lizard: setup
 	meson compile -C build lizard
 
+# || true is a workaround for
+# https://github.com/boostorg/boost/issues/1107
 clangtidy: setup
-	ninja -C build clang-tidy
+	ninja -C build clang-tidy || true
 
 scanbuild: setup
 	ninja -C build scan-build
