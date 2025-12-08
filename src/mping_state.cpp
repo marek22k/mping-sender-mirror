@@ -220,14 +220,16 @@ std::string MPingSender::MPingState::serialize() const
     result.append(pid.begin(), pid.end());
 
     /* Seconds */
-    auto seconds = NetworkSerialization::to_byte_array(
-        NetworkSerialization::to_bigendian(static_cast<uint64_t>(this->get_seconds().count())));
+    auto seconds =
+        NetworkSerialization::to_byte_array(NetworkSerialization::to_bigendian(
+            static_cast<uint64_t>(this->get_seconds().count())));
     static_assert(seconds.size() == 8);
     result.append(seconds.begin(), seconds.end());
 
     /* Microseconds */
-    auto microseconds = NetworkSerialization::to_byte_array(
-        NetworkSerialization::to_bigendian(static_cast<uint64_t>(this->get_microseconds().count())));
+    auto microseconds =
+        NetworkSerialization::to_byte_array(NetworkSerialization::to_bigendian(
+            static_cast<uint64_t>(this->get_microseconds().count())));
     static_assert(microseconds.size() == 8);
     result.append(microseconds.begin(), microseconds.end());
 

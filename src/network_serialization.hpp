@@ -8,8 +8,8 @@
 #include <algorithm>
 #include <array>
 #include <bit>
-#include <cstdint>
 #include <concepts>
+#include <cstdint>
 #include <boost/asio.hpp>
 
 namespace NetworkSerialization
