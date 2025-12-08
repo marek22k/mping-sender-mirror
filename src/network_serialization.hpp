@@ -44,21 +44,6 @@ namespace NetworkSerialization
     }
 
     template<typename T>
-    constexpr T htoh(const T host)
-        requires(std::endian::native == std::endian::big ||
-                 std::endian::native == std::endian::little)
-    {
-        if constexpr (std::endian::native == std::endian::little)
-        {
-            return std::byteswap(host);
-        }
-        else
-        {
-            return host;
-        }
-    }
-
-    template<typename T>
     constexpr std::array<unsigned char, sizeof(T)> uint_to_array(const T i)
     {
         return std::bit_cast<std::array<unsigned char, sizeof(T)>>(i);
