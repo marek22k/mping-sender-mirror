@@ -158,7 +158,7 @@ std::string MPingSender::MPingState::serialize() const
     result.push_back(static_cast<char>(this->_type));
 
     /* L */
-    auto ttl = NetworkSerialization::uint_to_array(
+    auto ttl = NetworkSerialization::to_byte_array(
         NetworkSerialization::to_bigendian(this->_ttl));
     result.append(ttl.begin(), ttl.end());
 
@@ -210,22 +210,22 @@ std::string MPingSender::MPingState::serialize() const
     }
 
     /* Seq */
-    auto seq = NetworkSerialization::uint_to_array(
+    auto seq = NetworkSerialization::to_byte_array(
         NetworkSerialization::to_bigendian(this->_sequence_number));
     result.append(seq.begin(), seq.end());
 
     /* PID */
-    auto pid = NetworkSerialization::uint_to_array(
+    auto pid = NetworkSerialization::to_byte_array(
         NetworkSerialization::to_bigendian(this->_pid));
     result.append(pid.begin(), pid.end());
 
     /* Seconds */
-    auto seconds = NetworkSerialization::uint_to_array(
+    auto seconds = NetworkSerialization::to_byte_array(
         NetworkSerialization::to_bigendian(this->get_seconds().count()));
     result.append(seconds.begin(), seconds.end());
 
     /* Microseconds */
-    auto microseconds = NetworkSerialization::uint_to_array(
+    auto microseconds = NetworkSerialization::to_byte_array(
         NetworkSerialization::to_bigendian(this->get_microseconds().count()));
     result.append(microseconds.begin(), microseconds.end());
 

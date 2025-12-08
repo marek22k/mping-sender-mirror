@@ -9,11 +9,12 @@
 #include <array>
 #include <bit>
 #include <cstdint>
+#include <concepts>
 #include <boost/asio.hpp>
 
 namespace NetworkSerialization
 {
-    template<typename T>
+    template<std::integral T>
     constexpr T to_bigendian(const T host)
         requires(std::endian::native == std::endian::big ||
                  std::endian::native == std::endian::little)
@@ -28,7 +29,7 @@ namespace NetworkSerialization
         }
     }
 
-    template<typename T>
+    template<std::integral T>
     constexpr T to_littleendian(const T host)
         requires(std::endian::native == std::endian::big ||
                  std::endian::native == std::endian::little)
@@ -44,7 +45,8 @@ namespace NetworkSerialization
     }
 
     template<typename T>
-    constexpr std::array<unsigned char, sizeof(T)> uint_to_array(const T i)
+    constexpr std::array<unsigned char, sizeof(T)> to_byte_array(const T i)
+        requires(std::is_trivially_copyable_v<T>)
     {
         return std::bit_cast<std::array<unsigned char, sizeof(T)>>(i);
     }
@@ -61,12 +63,12 @@ namespace NetworkSerialization
         /* 10 */
         constexpr uint16_t ipv6_type_int = 10;
         constexpr std::array<unsigned char, 2> ipv6_type =
-            uint_to_array(to_littleendian(ipv6_type_int));
+            to_byte_array(to_littleendian(ipv6_type_int));
         it = std::ranges::copy(ipv6_type, it).out;
 
         /* P */
         const std::array<unsigned char, 2> port_bytes =
-            uint_to_array(to_bigendian(port));
+            to_byte_array(to_bigendian(port));
         it = std::ranges::copy(port_bytes, it).out;
 
         std::advance(it, 4);
@@ -90,12 +92,12 @@ namespace NetworkSerialization
         /* 10 */
         constexpr uint16_t ipv4_type_int = 2;
         constexpr std::array<unsigned char, 2> ipv4_type =
-            uint_to_array(to_littleendian(ipv4_type_int));
+            to_byte_array(to_littleendian(ipv4_type_int));
         it = std::ranges::copy(ipv4_type, it).out;
 
         /* P */
         const std::array<unsigned char, 2> port_bytes =
-            uint_to_array(to_bigendian(port));
+            to_byte_array(to_bigendian(port));
         it = std::ranges::copy(port_bytes, it).out;
 
         std::advance(it, 4);

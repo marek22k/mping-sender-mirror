@@ -9,6 +9,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 ## Release 1.0.1
 
 - Correction of the copyright date
+- Improvement of type checking at compile time
 
 ## Release 1.0.0
 
