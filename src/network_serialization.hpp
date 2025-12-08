@@ -89,7 +89,7 @@ namespace NetworkSerialization
 
         auto * it = result.begin();
 
-        /* 10 */
+        /* 2 */
         constexpr uint16_t ipv4_type_int = 2;
         constexpr std::array<unsigned char, 2> ipv4_type =
             to_byte_array(to_littleendian(ipv4_type_int));
