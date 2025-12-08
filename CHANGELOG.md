@@ -6,6 +6,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Changelog
 
+## Release 1.0.1
+
+- Correction of the copyright date
+
 ## Release 1.0.0
 
 - Initial release
