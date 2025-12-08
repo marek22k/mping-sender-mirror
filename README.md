@@ -14,7 +14,7 @@ mping-sender is a simple multicast transmitter that sends a UDP packet every sec
 mping-sendet is a multicast sender designed to provide a simple multicast source that periodically sends out UDP packets to test multicast functionality.
 
 mping-sendet sends a UDP packet every second. The source and destination can be specified using command line arguments.
-The UDP packet attempts to follow large parts of the [mping](https://github.com/troglobit/mping/tree/main) implementation with an empty payload.
+The UDP packet attempts to follow large parts of the [mping](https://github.com/troglobit/mping/) implementation with an empty payload.
 
 ## Building
 
