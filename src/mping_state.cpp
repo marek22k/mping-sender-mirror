@@ -221,13 +221,13 @@ std::string MPingSender::MPingState::serialize() const
 
     /* Seconds */
     auto seconds = NetworkSerialization::to_byte_array(
-        NetworkSerialization::to_bigendian(this->get_seconds().count()));
+        NetworkSerialization::to_bigendian(static_cast<uint64_t>(this->get_seconds().count())));
     static_assert(seconds.size() == 8);
     result.append(seconds.begin(), seconds.end());
 
     /* Microseconds */
     auto microseconds = NetworkSerialization::to_byte_array(
-        NetworkSerialization::to_bigendian(this->get_microseconds().count()));
+        NetworkSerialization::to_bigendian(static_cast<uint64_t>(this->get_microseconds().count())));
     static_assert(microseconds.size() == 8);
     result.append(microseconds.begin(), microseconds.end());
 
