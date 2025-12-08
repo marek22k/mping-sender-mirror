@@ -20,6 +20,7 @@ MPingSender::MulticastTxSocket::MulticastTxSocket(
         PosixWrapper::if_nametoindex(interface)));
     this->_socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
     this->_socket.set_option(hops);
+    this->_socket.set_option(boost::asio::socket_base::receive_buffer_size(0));
 
     BOOST_LOG_TRIVIAL(info) << "Bind on address " << endpoint.address()
                             << " port " << endpoint.port();
