@@ -31,8 +31,6 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        apt list "libboost*"
-        sudo add-apt-repository --yes ppa:mhier/libboost-latest
         sudo apt-get install --yes build-essential git meson ninja-build cmake libboost1.83-dev libboost-log1.83-dev libboost-program-options1.83-dev libpcap-dev googletest libcap-ng-dev libseccomp-dev
     - name: Build
       run: |
