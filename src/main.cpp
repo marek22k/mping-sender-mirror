@@ -95,8 +95,6 @@ int main(int argc, char * argv[])
 
 #ifdef HAVE_LANDLOCK
         BOOST_LOG_TRIVIAL(info) << "Landlock: true";
-        BOOST_LOG_TRIVIAL(info)
-            << "Landlock ABI version: " << LandlockRuleset::get_abi_version();
 #else
         BOOST_LOG_TRIVIAL(info) << "Landlock: false";
 #endif
