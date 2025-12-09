@@ -16,7 +16,7 @@ LandlockRuleset::LandlockRuleset(uint64_t handled_access_fr,
     if (this->abi_version < 6)
         throw std::runtime_error("Landlock is too old.");
 
-    const struct landlock_ruleset_attr attr = {
+    const struct ::landlock_ruleset_attr attr = {
         .handled_access_fs = handled_access_fr,
         .handled_access_net = handled_access_net,
         .scoped = scoped};
@@ -31,7 +31,7 @@ LandlockRuleset::LandlockRuleset(uint64_t handled_access_fr,
 void LandlockRuleset::add_path_beneath_rule(uint64_t allowed_access,
                                             int32_t parent_fd) const
 {
-    const struct landlock_path_beneath_attr attr = {
+    const struct ::landlock_path_beneath_attr attr = {
         .allowed_access = allowed_access, .parent_fd = parent_fd};
     if (::landlock_add_rule(this->ruleset,
                             LANDLOCK_RULE_PATH_BENEATH,
@@ -44,7 +44,7 @@ void LandlockRuleset::add_path_beneath_rule(uint64_t allowed_access,
 void LandlockRuleset::add_net_port_rule(uint64_t allowed_access,
                                         uint64_t port) const
 {
-    const struct landlock_net_port_attr attr = {
+    const struct ::landlock_net_port_attr attr = {
         .allowed_access = allowed_access, .port = port};
     if (::landlock_add_rule(this->ruleset,
                             LANDLOCK_RULE_NET_PORT,

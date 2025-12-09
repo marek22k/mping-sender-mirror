@@ -50,7 +50,8 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
     notify(vm);
 
 #ifdef __clang__
-    boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >=
+                                        boost::log::trivial::info);
 #else
     boost::log::core::get()->set_filter(boost::log::trivial::severity >=
                                         this->_log_level);
