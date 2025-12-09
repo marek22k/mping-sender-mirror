@@ -21,12 +21,12 @@ jobs:
         make setup
     - uses: vapier/coverity-scan-action@v1
       with:
-        project: 'crazytrace'
+        project: 'mping-sender'
         email: ${{ secrets.COVERITY_SCAN_EMAIL }}
         token: ${{ secrets.COVERITY_SCAN_TOKEN }}
-    - uses: actions/upload-artifact@v4
-      with:
-        path: cov-int.tgz
-        retention-days: 3
-        compression-level: 0
-        overwrite: true
+    # - uses: actions/upload-artifact@v4
+    #   with:
+    #     path: cov-int.tgz
+    #     retention-days: 3
+    #     compression-level: 0
+    #     overwrite: true
