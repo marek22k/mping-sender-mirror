@@ -13,7 +13,9 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
     // clang-format off
     options.add_options()
       ("help", "Help screen")
+#ifndef __clang__
       ("log-level", boost::program_options::value<boost::log::trivial::severity_level>(&this->_log_level)->default_value(boost::log::trivial::info), "Log level. Valid options are trace, debug, info, warning, error and fatal. Defaults to info.")
+#endif
       ("bind-address", boost::program_options::value<std::string>(&this->_bind_address)->required(), "Address to which the UDP socket is bound. Required.")
       ("bind-port", boost::program_options::value<uint16_t>(&this->_bind_port)->default_value(4321), "Port to which the UDP socket is bound. Defaults to 4321.")
       ("address", boost::program_options::value<std::string>(&this->_address)->default_value("ff2e::42"), "Address to send packets to. Defaults to ff2e::42")
@@ -47,8 +49,12 @@ MPingSender::Configuration::Configuration(const std::span<char *> args)
 
     notify(vm);
 
+#ifdef __clang__
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+#else
     boost::log::core::get()->set_filter(boost::log::trivial::severity >=
                                         this->_log_level);
+#endif
 }
 
 // NOLINTEND(cppcoreguidelines-pro-type-member-init)
