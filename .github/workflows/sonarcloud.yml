@@ -19,18 +19,17 @@ jobs:
           sudo apt-get update
           sudo add-apt-repository --yes ppa:mhier/libboost-latest
           sudo apt-get install --yes build-essential git meson ninja-build cmake libboost1.83-dev libboost-log1.83-dev libboost-program-options1.83-dev libpcap-dev googletest libcap-ng-dev libseccomp-dev
-      - name: Install sonar-scanner and build-wrapper
-        uses: SonarSource/sonarcloud-github-c-cpp@v2
       - name: Configure
         run: meson setup -Db_coverage=true build
-      - name: Run build-wrapper
-        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make clean all test
-      - name: Generate coverage report
-        run: ninja -C build coverage-sonarqube
-      - name: Run sonar-scanner
+      - name: Install Build Wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
+      - name: Run Build Wrapper
+        run: |
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -C build coverage-sonarqube
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner \
-            --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json" \
-            --define sonar.coverageReportPaths="build/meson-logs/sonarqube.xml"
+        with:
+          args: >
+            --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
