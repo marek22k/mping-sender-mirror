@@ -17,7 +17,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo add-apt-repository --yes ppa:mhier/libboost-latest
           sudo apt-get install --yes build-essential git meson ninja-build cmake libboost1.83-dev libboost-log1.83-dev libboost-program-options1.83-dev libpcap-dev googletest libcap-ng-dev libseccomp-dev gcovr
       - name: Configure
         run: meson setup -Db_coverage=true build
@@ -26,6 +25,9 @@ jobs:
       - name: Run Build Wrapper
         run: |
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -C build coverage-sonarqube
+      - name: Output compile_commands.json
+        run: |
+          cat /home/runner/work/mping-sender-mirror/mping-sender-mirror/build/compile_commands.json
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
