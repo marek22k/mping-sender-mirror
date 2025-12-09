@@ -12,13 +12,13 @@ project(
         'optimization=2',
         'warning_level=3',
         'werror=true',
-        'cpp_std=gnu++26',
+        'cpp_std=gnu++23',
         'b_asneeded=true',
         'b_lto=true',
         'b_ndebug=if-release',
         'b_pie=true'
     ],
-    meson_version: '>=1.5.0'
+    meson_version: '>=1.3.2'
 )
 
 cpp_compiler = meson.get_compiler('cpp')
@@ -94,7 +94,7 @@ if cpp_compiler.has_header('linux/landlock.h')
             cpp_compiler.has_function('syscall', prefix: '#include <unistd.h>', required: true)
             cpp_compiler.has_header('sys/syscall.h', required: true)
             syscall_number_macro = 'SYS_' + function
-            cpp_compiler.compiles('#include <sys/syscall.h>\nint number = ' + syscall_number_macro + ';', name: syscall_number_macro + ' number is available', required: true)
+            cpp_compiler.compiles('#include <sys/syscall.h>\nint number = ' + syscall_number_macro + ';', name: syscall_number_macro + ' number is available')
 
             macro = 'NO_' + function.to_upper()
             add_project_arguments('-D' + macro, language: 'cpp')
@@ -111,8 +111,7 @@ if cpp_compiler.has_header('linux/landlock.h')
                 .scoped = 0
             };
         ''',
-        name: 'Landlock supports scoped access control',
-        required: true
+        name: 'Landlock supports scoped access control'
     )
 
     cpp_compiler.compiles(
@@ -123,8 +122,7 @@ if cpp_compiler.has_header('linux/landlock.h')
                 .parent_fd = 0
             };
         ''',
-        name: 'Landlock has landlock_path_beneath_attr',
-        required: true
+        name: 'Landlock has landlock_path_beneath_attr'
     )
 
     cpp_compiler.compiles(
@@ -135,8 +133,7 @@ if cpp_compiler.has_header('linux/landlock.h')
                 .port = 0
             };
         ''',
-        name: 'Landlock has landlock_net_port_attr',
-        required: true
+        name: 'Landlock has landlock_net_port_attr'
     )
 
     landlock_macros = [
@@ -170,7 +167,7 @@ if cpp_compiler.has_header('linux/landlock.h')
     ]
 
     foreach macro : landlock_macros
-        cpp_compiler.compiles('#include <linux/landlock.h>\nint number = ' + macro + ';', name: macro + ' number is available', required: true)
+        cpp_compiler.compiles('#include <linux/landlock.h>\nint number = ' + macro + ';', name: macro + ' number is available')
     endforeach
 
     if cpp_compiler.compiles('#include <linux/landlock.h>\nint number = LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON;', name: 'LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON number is available')
