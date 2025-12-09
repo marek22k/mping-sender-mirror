@@ -11,6 +11,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 mping-sender is a simple multicast transmitter that sends a UDP packet every second.
 
+![Logo of mping-sender. You can see a diagram. On the left is a circle with the letter "S" and there are various arrows pointing to other circles. These circles either contain the letter "R", refer to other circles that contain the letter "R", or refer to other circles that refer to circles containing the letter "R".](./mping-sender.drawio.png)
+
 mping-sendet is a multicast sender designed to provide a simple multicast source that periodically sends out UDP packets to test multicast functionality.
 
 mping-sendet sends a UDP packet every second. The source and destination can be specified using command line arguments.
