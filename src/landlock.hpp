@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Copyright (C) 2025 Marek Küthe <m.k@mk16.de>
+// SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,8 +7,7 @@
 
 #ifdef HAVE_LANDLOCK
 
-    #include <system_error>
-    #include <cerrno>
+    #include <stdexcept>
     #include <cstdint>
     #include <linux/landlock.h>
 
@@ -24,7 +23,7 @@ inline int landlock_create_ruleset(const struct landlock_ruleset_attr * attr,
                                    uint32_t flags)
 {
     return static_cast<int>(
-        ::syscall(SYS_landlock_create_ruleset, attr, size, flags));
+        syscall(SYS_landlock_create_ruleset, attr, size, flags));
 }
         #endif
 
@@ -34,7 +33,7 @@ inline int landlock_add_rule(int ruleset_fd,
                              const void * rule_attr,
                              uint32_t flags)
 {
-    return static_cast<int>(::syscall(
+    return static_cast<int>(syscall(
         SYS_landlock_add_rule, ruleset_fd, rule_type, rule_attr, flags));
 }
         #endif
@@ -43,7 +42,7 @@ inline int landlock_add_rule(int ruleset_fd,
 inline int landlock_restrict_self(int ruleset_fd, uint32_t flags)
 {
     return static_cast<int>(
-        ::syscall(SYS_landlock_restrict_self, ruleset_fd, flags));
+        syscall(SYS_landlock_restrict_self, ruleset_fd, flags));
 }
         #endif
 
@@ -53,21 +52,14 @@ class LandlockRuleset
 {
     public:
         explicit LandlockRuleset(uint64_t handled_access_fr,
-                                 uint64_t handled_access_net,
-                                 uint64_t scoped);
+                                 uint64_t handled_access_net);
         void add_path_beneath_rule(uint64_t allowed_access,
                                    int32_t parent_fd) const;
-        void add_net_port_rule(uint64_t allowed_access, uint64_t port) const;
-    #ifdef HAVE_LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
-        void restrict_self(uint32_t flags) const;
-    #else
         void restrict_self() const;
-    #endif
 
-        [[nodiscard]] static int get_abi_version() noexcept;
+        [[nodiscard]] static int abi_version() noexcept;
 
     private:
-        int abi_version;
         int ruleset;
 };
 
