@@ -1,0 +1,48 @@
+name: "Coverage"
+
+on:
+  push:
+    branches: [ "github" ]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'c-cpp' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo add-apt-repository --yes ppa:mhier/libboost-latest
+        sudo apt-get install --yes build-essential git meson ninja-build cmake libboost1.83-dev libboost-log1.83-dev libboost-program-options1.83-dev libpcap-dev googletest libcap-ng-dev libseccomp-dev
+    - name: Configure
+      run: meson setup -Db_coverage=true build
+    - name: Build
+      run: make
+    - name: Run tests
+      run: make test
+    - name: Generate coverage reports
+      run: ninja -C build coverage-xml
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: marek22k/mping-sender-mirror
+        files: build/meson-logs/coverage.xml
+    - name: Upload coverage reports to CodeScene
+      run: |
+        curl https://deepsource.io/cli | sh
+        ./bin/deepsource report --analyzer test-coverage --key cxx --value-file build/meson-logs/coverage.xml
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}

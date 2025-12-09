@@ -1,0 +1,32 @@
+name: Coverity Scan
+
+on:
+  push:
+    branches: [ "github" ]
+  schedule:
+    - cron: '19 8 * * 5'
+
+jobs:
+  coverity:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo add-apt-repository --yes ppa:mhier/libboost-latest
+        sudo apt-get install --yes build-essential git meson ninja-build cmake libboost1.83-dev libboost-log1.83-dev libboost-program-options1.83-dev libpcap-dev googletest libcap-ng-dev libseccomp-dev
+    - name: Configure project
+      run: |
+        make setup
+    - uses: vapier/coverity-scan-action@v1
+      with:
+        project: 'crazytrace'
+        email: ${{ secrets.COVERITY_SCAN_EMAIL }}
+        token: ${{ secrets.COVERITY_SCAN_TOKEN }}
+    - uses: actions/upload-artifact@v4
+      with:
+        path: cov-int.tgz
+        retention-days: 3
+        compression-level: 0
+        overwrite: true

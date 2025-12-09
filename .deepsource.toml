@@ -1,0 +1,10 @@
+version = 1
+test_patterns = ["tests/**"]
+[[analyzers]]
+name = "cxx"
+enabled = true
+[analyzers.meta]
+  misra_compliance = false
+[[analyzers]]
+name = "test-coverage"
+enabled = true
