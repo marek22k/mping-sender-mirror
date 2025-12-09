@@ -34,7 +34,7 @@ void MPingSender::MulticastTxSocket::send_packet(
         << "Sending packet to address " << endpoint.address() << " port "
         << endpoint.port();
 
-    const auto sdata = std::make_shared<std::string>(message);
+    const auto sdata = std::make_shared<const std::string>(message);
     this->_socket.async_send_to(
         boost::asio::buffer(*sdata),
         endpoint,
