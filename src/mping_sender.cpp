@@ -13,9 +13,9 @@ MPingSender::Sender::Sender(
     std::function<void(boost::system::error_code)> network_error_handler,
     std::function<void(boost::system::error_code)> timer_error_handler,
     const std::string& bind_address,
-    const int bind_port,
+    const uint16_t bind_port,
     const std::string& address,
-    const int port,
+    const uint16_t port,
     uint8_t ttl,
     const std::string& interface) :
     _socket(ex,

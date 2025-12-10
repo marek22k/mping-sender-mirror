@@ -22,9 +22,9 @@ namespace MPingSender
                             std::function<void(boost::system::error_code)>
                                 timer_error_handler,
                             const std::string& bind_address,
-                            const int bind_port,
+                            const uint16_t bind_port,
                             const std::string& address,
-                            const int port,
+                            const uint16_t port,
                             uint8_t ttl,
                             const std::string& interface);
 
