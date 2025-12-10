@@ -116,13 +116,13 @@ local e_invalid_source_host_family = ProtoExpert.new(
     expert.group.MALFORMED,
     expert.severity.ERROR
 )
-local f_mismatch_source_host_address = ProtoExpert.new(
+local e_mismatch_source_host_address = ProtoExpert.new(
     "mping.src.mismatch_addr",
     "Source address does not match the one in the upper header.",
     expert.group.PROTOCOL,
     expert.severity.WARN
 )
-local f_mismatch_source_host_port = ProtoExpert.new(
+local e_mismatch_source_host_port = ProtoExpert.new(
     "mping.src.mismatch_port",
     "Source Port does not match the one in the upper header.",
     expert.group.PROTOCOL,
@@ -135,13 +135,13 @@ local e_invalid_destination_host_family = ProtoExpert.new(
     expert.group.MALFORMED,
     expert.severity.ERROR
 )
-local f_mismatch_destination_host_address = ProtoExpert.new(
+local e_mismatch_destination_host_address = ProtoExpert.new(
     "mping.dst.mismatch_addr",
     "Destination address does not match the one in the upper header.",
     expert.group.PROTOCOL,
     expert.severity.WARN
 )
-local f_mismatch_destination_host_port = ProtoExpert.new(
+local e_mismatch_destination_host_port = ProtoExpert.new(
     "mping.dst.mismatch_port",
     "Destination Port does not match the one in the upper header.",
     expert.group.PROTOCOL,
@@ -181,11 +181,11 @@ mping_protocol.experts = {
     e_invalid_type,
 
     e_invalid_source_host_family,
-    f_mismatch_source_host_address,
-    f_mismatch_source_host_port,
+    e_mismatch_source_host_address,
+    e_mismatch_source_host_port,
     e_invalid_destination_host_family,
-    f_mismatch_destination_host_address,
-    f_mismatch_destination_host_port,
+    e_mismatch_destination_host_address,
+    e_mismatch_destination_host_port,
 
     e_timestamp,
 }
@@ -224,7 +224,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
         source_host_tree:add(f_source_host_port, buffer(10, 2), source_host_port)
 
         if source_host_port ~= pinfo.src_port then
-            source_host_tree:add_proto_expert_info(f_mismatch_source_host_port)
+            source_host_tree:add_proto_expert_info(e_mismatch_source_host_port)
         end
 
         if source_host_family == 10 then -- AF_INET6
@@ -232,14 +232,14 @@ function mping_protocol.dissector(buffer, pinfo, tree)
             source_host_tree:add(f_source_host_ipv6, buffer(16, 16), source_host_ipv6)
 
             if source_host_ipv6 ~= pinfo.src then
-                source_host_tree:add_proto_expert_info(f_mismatch_source_host_address)
+                source_host_tree:add_proto_expert_info(e_mismatch_source_host_address)
             end
         elseif source_host_family == 2 then -- AF_INET
             local source_host_ipv4 = buffer(12, 4):ipv4()
             source_host_tree:add(f_source_host_ipv4, buffer(12, 4), source_host_ipv4)
 
             if source_host_ipv4 ~= pinfo.src then
-                source_host_tree:add_proto_expert_info(f_mismatch_source_host_address)
+                source_host_tree:add_proto_expert_info(e_mismatch_source_host_address)
             end
         end
     else
@@ -255,7 +255,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
         destination_host_tree:add(f_destination_host_port, buffer(138, 2), destination_host_port)
 
         if destination_host_port ~= pinfo.dst_port then
-            destination_host_tree:add_proto_expert_info(f_mismatch_destination_host_port)
+            destination_host_tree:add_proto_expert_info(e_mismatch_destination_host_port)
         end
 
         if destination_host_family == 10 then -- AF_INET6
@@ -263,14 +263,14 @@ function mping_protocol.dissector(buffer, pinfo, tree)
             destination_host_tree:add(f_destination_host_ipv6, buffer(144, 16), destination_host_ipv6)
 
             if destination_host_ipv6 ~= pinfo.dst then
-                destination_host_tree:add_proto_expert_info(f_mismatch_destination_host_address)
+                destination_host_tree:add_proto_expert_info(e_mismatch_destination_host_address)
             end
         elseif destination_host_family == 2 then -- AF_INET
             local destination_host_ipv4 = buffer(140, 4):ipv4()
             destination_host_tree:add(f_destination_host_ipv4, buffer(140, 4), destination_host_ipv4)
 
             if destination_host_ipv4 ~= pinfo.dst then
-                destination_host_tree:add_proto_expert_info(f_mismatch_destination_host_address)
+                destination_host_tree:add_proto_expert_info(e_mismatch_destination_host_address)
             end
         end
     else
