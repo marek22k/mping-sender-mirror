@@ -50,6 +50,9 @@ selene: setup
 luacheck: setup
 	meson compile -C build luacheck
 
+stylua: setup
+	meson compile -C build stylua
+
 lizard: setup
 	meson compile -C build lizard
 

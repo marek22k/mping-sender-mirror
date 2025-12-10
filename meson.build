@@ -237,7 +237,15 @@ if luacheck.found()
     run_target('luacheck', command: [
         luacheck,
         '--config', join_paths(meson.current_source_dir(), '.luacheckrc'),
-        'src',
+        lua_sources
+    ])
+endif
+
+luacheck = find_program('stylua', required: false)
+if luacheck.found()
+    run_target('stylua', command: [
+        luacheck,
+        '--config-path', join_paths(meson.current_source_dir(), '.stylua.toml'),
         lua_sources
     ])
 endif
