@@ -214,7 +214,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     local source_host_family = buffer(8, 2):le_uint()
     source_host_tree:add_le(f_source_host_family, buffer(8, 2), source_host_family)
 
-    if source_host_family == 10 or source_host_family == 2 then
+    if source_host_family == AF_INET6 or source_host_family == AF_INET then
         local source_host_port = buffer(10, 2):uint()
         source_host_tree:add(f_source_host_port, buffer(10, 2), source_host_port)
 
@@ -245,7 +245,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     local destination_host_family = buffer(136, 2):le_uint()
     destination_host_tree:add_le(f_destination_host_family, buffer(136, 2), destination_host_family)
 
-    if destination_host_family == 10 or destination_host_family == 2 then
+    if destination_host_family == AF_INET6 or destination_host_family == AF_INET then
         local destination_host_port = buffer(138, 2):uint()
         destination_host_tree:add(f_destination_host_port, buffer(138, 2), destination_host_port)
 
