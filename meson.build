@@ -55,6 +55,9 @@ markdown_files = files(
     'README.md',
     'SECURITY.md'
 )
+lua_sources = files(
+    'wireshark/mping.lua'
+)
 all_sources = main_file + sources + headers + tests_sources
 
 if get_option('native')
@@ -217,6 +220,33 @@ if flawfinder.found()
     ])
 endif
 
+selene = find_program('selene', required: false)
+if selene.found()
+    run_target('selene', command: [
+        selene,
+        '--config', join_paths(meson.current_source_dir(), 'selene.toml'),
+        lua_sources
+    ])
+endif
+
+luacheck = find_program('luacheck', required: false)
+if luacheck.found()
+    run_target('luacheck', command: [
+        luacheck,
+        '--config', join_paths(meson.current_source_dir(), '.luacheckrc'),
+        lua_sources
+    ])
+endif
+
+luacheck = find_program('stylua', required: false)
+if luacheck.found()
+    run_target('stylua', command: [
+        luacheck,
+        '--config-path', join_paths(meson.current_source_dir(), '.stylua.toml'),
+        lua_sources
+    ])
+endif
+
 lizard = find_program('lizard', required: false)
 if lizard.found()
     run_target('lizard', command: [
@@ -224,7 +254,7 @@ if lizard.found()
         '--CCN', '25',
         '--length', '400',
         '--arguments', '10',
-        all_sources
+        all_sources + lua_sources
     ])
 endif
 

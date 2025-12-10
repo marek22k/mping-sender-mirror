@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024-2025 Marek Küthe <m.k@mk16.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+std="lua53" # need lua5.4
+
+[lints]
+undefined_variable = "allow"
+incorrect_standard_library_use = "allow"
+
+[config]

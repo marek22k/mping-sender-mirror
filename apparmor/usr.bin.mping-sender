@@ -8,7 +8,7 @@ include <tunables/global>
 /usr/bin/mping-sender flags=(enforce) {
   include <abstractions/base>
 
-  capability net_admin,
+  capability setpcap,
 
   network (create) inet dgram,
   network (create) inet6 dgram,

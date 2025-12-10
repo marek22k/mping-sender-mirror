@@ -16,8 +16,9 @@ steps:
     pull: true
     commands:
       - export PATH="$HOME/.local/bin:$PATH"
+      - eval "$(luarocks path --bin)"
+      - . "$HOME/.cargo/env"
       - apt-get update
-      - apt-get --yes install build-essential meson ninja-build libboost1.88-all-dev libseccomp-dev libcap-ng-dev clang-tidy cppcheck flawfinder debhelper debhelper-compat ruby-mdl
       - make debian
       - |
         for FILE in ../mping-sender_*.deb; do

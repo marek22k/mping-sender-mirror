@@ -133,4 +133,6 @@ To create a new release the following is necessary:
 - Create a changelog entry
 - Create a changelog entry for the Debian package
 - Update the SECURITY.md
+- Update version in the WireShark plugin
+- Update version in PKGBUILD
 - Create a new git tag

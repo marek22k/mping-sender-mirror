@@ -8,15 +8,18 @@
 #include <chrono>
 #include <limits>
 #include <random>
+#include <utility>
+#include <stdexcept>
 #include <cstdint>
 #include <boost/asio.hpp>
+#include <boost/log/trivial.hpp>
 #include "network_serialization.hpp"
 
 #define MPING_STATE_VERSION "2.0"
 
 namespace MPingSender
 {
-    enum class MPING_STATE_TYPE
+    enum class MPING_STATE_TYPE : char
     {
         SENDER = 's',
         RECEIVER = 'r'
