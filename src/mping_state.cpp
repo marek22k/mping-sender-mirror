@@ -232,8 +232,6 @@ std::string MPingSender::MPingState::serialize() const
         NetworkSerialization::to_byte_array(NetworkSerialization::to_bigendian(
             static_cast<uint64_t>(this->get_microseconds().count())));
     static_assert(microseconds.size() == 8);
-    BOOST_LOG_TRIVIAL(info) << "Seconds: " << this->get_seconds().count();
-    BOOST_LOG_TRIVIAL(info) << "Microseconds: " << this->get_microseconds().count();
     result.append(microseconds.begin(), microseconds.end());
 
     return result;
