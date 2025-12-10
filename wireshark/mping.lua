@@ -73,14 +73,20 @@ local mping_protocol = Proto("mping", "Multicast Ping Protocol")
 
 local MPING_VERSION = "2.0"
 
+local TYPE_SENDER = string.byte("s")
+local TYPE_RECEIVER = string.byte("s")
+
 local f_type_lookup = {
-    [115] = "Sender",
-    [114] = "Receiver",
+    [TYPE_SENDER] = "Sender",
+    [TYPE_RECEIVER] = "Receiver",
 }
 
+local AF_INET = 2
+local AF_INET6 = 10
+
 local f_host_family_lookup = {
-    [2] = "AF_INET",
-    [10] = "AF_INET6",
+    [AF_INET] = "AF_INET",
+    [AF_INET6] = "AF_INET6",
 }
 
 local f_version = ProtoField.stringz("mping.version", "Version", base.ASCII)
@@ -199,7 +205,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
 
     local type = buffer(4, 1):uint()
     subtree:add(f_type, buffer(4, 1), type)
-    if type ~= 115 and type ~= 114 then
+    if type ~= TYPE_SENDER and type ~= TYPE_RECEIVER then
         subtree:add_proto_expert_info(e_depracated_version)
     end
     subtree:add(f_ttl, buffer(5, 1))
@@ -216,14 +222,14 @@ function mping_protocol.dissector(buffer, pinfo, tree)
             source_host_tree:add_proto_expert_info(e_mismatch_source_host_port)
         end
 
-        if source_host_family == 10 then -- AF_INET6
+        if source_host_family == AF_INET6 then
             local source_host_ipv6 = buffer(16, 16):ipv6()
             source_host_tree:add(f_source_host_ipv6, buffer(16, 16), source_host_ipv6)
 
             if source_host_ipv6 ~= pinfo.src then
                 source_host_tree:add_proto_expert_info(e_mismatch_source_host_address)
             end
-        elseif source_host_family == 2 then -- AF_INET
+        elseif source_host_family == AF_INET then
             local source_host_ipv4 = buffer(12, 4):ipv4()
             source_host_tree:add(f_source_host_ipv4, buffer(12, 4), source_host_ipv4)
 
@@ -247,14 +253,14 @@ function mping_protocol.dissector(buffer, pinfo, tree)
             destination_host_tree:add_proto_expert_info(e_mismatch_destination_host_port)
         end
 
-        if destination_host_family == 10 then -- AF_INET6
+        if destination_host_family == AF_INET6 then
             local destination_host_ipv6 = buffer(144, 16):ipv6()
             destination_host_tree:add(f_destination_host_ipv6, buffer(144, 16), destination_host_ipv6)
 
             if destination_host_ipv6 ~= pinfo.dst then
                 destination_host_tree:add_proto_expert_info(e_mismatch_destination_host_address)
             end
-        elseif destination_host_family == 2 then -- AF_INET
+        elseif destination_host_family == AF_INET then
             local destination_host_ipv4 = buffer(140, 4):ipv4()
             destination_host_tree:add(f_destination_host_ipv4, buffer(140, 4), destination_host_ipv4)
 
