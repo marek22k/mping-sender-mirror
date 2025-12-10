@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-.PHONY: all setup addresssanitizer leaksanitizer undefinedsanitizer clean compile coverage install debian check cppcheck flawfinder selene luacheck mdl lizard clangtidy reuse-annotate reuse-download reuse-lint reuse-fix reuse test clangformat
+.PHONY: all setup addresssanitizer leaksanitizer undefinedsanitizer clean compile coverage install debian check cppcheck flawfinder selene luacheck mdl lua lizard clangtidy reuse-annotate reuse-download reuse-lint reuse-fix reuse test clangformat
 
 all: setup compile
 
@@ -52,6 +52,8 @@ luacheck: setup
 
 stylua: setup
 	meson compile -C build stylua
+
+lua: setup stylua luacheck selene
 
 lizard: setup
 	meson compile -C build lizard

@@ -148,13 +148,6 @@ local e_mismatch_destination_host_port = ProtoExpert.new(
     expert.severity.WARN
 )
 
-local e_timestamp = ProtoExpert.new(
-    "mping.timestamp.timestamp",
-    "corresponds to absolute time: [to fill out]",
-    expert.group.COMMENTS_GROUP,
-    expert.severity.COMMENT
-)
-
 mping_protocol.fields = {
     f_version,
     f_type,
@@ -186,8 +179,6 @@ mping_protocol.experts = {
     e_invalid_destination_host_family,
     e_mismatch_destination_host_address,
     e_mismatch_destination_host_port,
-
-    e_timestamp,
 }
 
 function mping_protocol.dissector(buffer, pinfo, tree)
@@ -289,13 +280,12 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     timestamp_tree:add(f_microseconds, buffer(280, 8), microseconds)
 
     if seconds < max_uint64 and microseconds < max_uint64 then -- check if :tonumber() is safe to use
-        timestamp_tree:add_proto_expert_info(
-            e_timestamp,
-            "corresponds to absolute time: "
+        timestamp_tree:add(
+            "[corresponds to absolute time: "
                 .. format_time(seconds:tonumber())
                 .. ", "
                 .. math.tointeger(microseconds:tonumber())
-                .. " microseconds"
+                .. " microseconds]"
         )
     end
 end
