@@ -276,7 +276,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     local seconds = buffer(272, 8):uint64()
     timestamp_tree:add(f_seconds, buffer(272, 8), seconds)
 
-    local microseconds = buffer(272, 8):uint64()
+    local microseconds = buffer(280, 8):uint64()
     timestamp_tree:add(f_microseconds, buffer(280, 8), microseconds)
 
     if seconds < max_uint64 and microseconds < max_uint64 then -- check if :tonumber() is safe to use
