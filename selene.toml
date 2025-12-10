@@ -1,0 +1,7 @@
+std="lua53" # need lua5.4
+
+[lints]
+undefined_variable = "allow"
+incorrect_standard_library_use = "allow"
+
+[config]

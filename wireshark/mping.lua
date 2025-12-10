@@ -2,6 +2,9 @@
 --
 -- SPDX-License-Identifier: GPL-3.0-or-later
 
+-- WireShark plugin directories: Help -> About - Folders -> {Personal,Global} Lua Plugins
+-- Requires Lua 5.4
+
 --[[
 MPing packet =
     0                   1                   2                   3
@@ -59,6 +62,12 @@ MPing packet =
 
     otherwise bigendian
 ]]
+
+local mping_plugin_info = {
+    version = "1.0.0",
+    author = "Marek Küthe",
+    repository = "https://codeberg.org/mark22k/mping-sender"
+}
 
 local mping_protocol = Proto("mping", "Multicast Ping Protocol")
 
@@ -127,27 +136,6 @@ mping_protocol.experts = {
     e_timestamp
 }
 
-function format_duration(sec, usec)
-    local remaining_sec = sec
-    
-    local days = math.floor(remaining_sec / 86400)
-    remaining_sec = remaining_sec % 86400
-    
-    local hours = math.floor(remaining_sec / 3600)
-    remaining_sec = remaining_sec % 3600
-    
-    local mins = math.floor(remaining_sec / 60)
-    local secs = remaining_sec % 60
-    
-    if days > 0 then
-        return string.format("%d days, %02d:%02d:%02d.%06d", days, hours, mins, secs, usec)
-    elseif hours > 0 then
-        return string.format("%02d:%02d:%02d.%06d", hours, mins, secs, usec)
-    else
-        return string.format("%02d:%02d.%06d", mins, secs, usec)
-    end
-end
-
 function mping_protocol.dissector(buffer, pinfo, tree)
     local max_uint64 = UInt64.new(math.maxinteger)
 
@@ -192,7 +180,7 @@ function mping_protocol.dissector(buffer, pinfo, tree)
             if source_host_ipv6 ~= pinfo.src then
                 source_host_tree:add_proto_expert_info(f_mismatch_source_host_address)
             end
-        elseif (source_host_family == 2) then -- AF_INET
+        elseif source_host_family == 2 then -- AF_INET
             local source_host_ipv4 = buffer(12, 4):ipv4()
             source_host_tree:add(f_source_host_ipv4, buffer(12, 4), source_host_ipv4)
             
@@ -246,10 +234,12 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     local microseconds = buffer(272, 8):uint64()
     timestamp_tree:add(f_microseconds, buffer(280, 8), microseconds)
     
-    if seconds < max_uint64 and microseconds < max_uint64 then -- is :tonumber() safe to use?
-        timestamp_tree:add_proto_expert_info(e_timestamp, "corresponds to absolute time: " .. format_duration(seconds:tonumber(), microseconds:tonumber()))
+    if seconds < max_uint64 and microseconds < max_uint64 then -- check if :tonumber() is safe to use
+        timestamp_tree:add_proto_expert_info(e_timestamp, "corresponds to absolute time: " .. format_time(seconds:tonumber()) .. ", " .. math.tointeger(microseconds:tonumber()) .. " microseconds")
     end
 end
+
+set_plugin_info(mping_plugin_info)
 
 local udp_port = DissectorTable.get("udp.port")
 udp_port:add(4321, mping_protocol)
