@@ -188,8 +188,6 @@ function mping_protocol.dissector(buffer, pinfo, tree)
         return
     end
 
-    pinfo.cols.protocol = mping_protocol.name
-
     local subtree = tree:add(mping_protocol, buffer(), mping_protocol.description)
 
     local version = buffer(0, 4):stringz()
