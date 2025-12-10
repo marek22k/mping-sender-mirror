@@ -118,21 +118,21 @@ local e_timestamp = ProtoExpert.new("mping.timestamp.timestamp", "corresponds to
 
 mping_protocol.fields = {
     f_version, f_type, f_ttl,
-    
+
     f_source_host_family, f_source_host_ipv4, f_source_host_ipv6, f_source_host_port,
     f_destination_host_family, f_destination_host_ipv4, f_destination_host_ipv6, f_destination_host_port,
-    
+
     f_sequence_number, f_pid,
-    
+
     f_seconds, f_microseconds
 }
 
 mping_protocol.experts = {
     e_depracated_version, e_invalid_type,
-    
+
     e_invalid_source_host_family, f_mismatch_source_host_address, f_mismatch_source_host_port,
     e_invalid_destination_host_family, f_mismatch_destination_host_address, f_mismatch_destination_host_port,
-    
+
     e_timestamp
 }
 
@@ -142,18 +142,18 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     if buffer:len() < 288 then
         return
     end
-    
+
     pinfo.cols.protocol = mping_protocol.name
-    
+
     local subtree = tree:add(mping_protocol, buffer(), mping_protocol.description)
-    
+
     local version = buffer(0, 4):stringz()
     subtree:add(f_version, buffer(0, 4), version)
-    
+
     if version ~= MPING_VERSION then
         return
     end
-    
+
     local type = buffer(4, 1):uint()
     subtree:add(f_type, buffer(4, 1), type)
     if type ~= 115 and type ~= 114 then
@@ -172,18 +172,18 @@ function mping_protocol.dissector(buffer, pinfo, tree)
         if source_host_port ~= pinfo.src_port then
             source_host_tree:add_proto_expert_info(f_mismatch_source_host_port)
         end
-        
+
         if source_host_family == 10 then -- AF_INET6
             local source_host_ipv6 = buffer(16, 16):ipv6()
             source_host_tree:add(f_source_host_ipv6, buffer(16, 16), source_host_ipv6)
-            
+
             if source_host_ipv6 ~= pinfo.src then
                 source_host_tree:add_proto_expert_info(f_mismatch_source_host_address)
             end
         elseif source_host_family == 2 then -- AF_INET
             local source_host_ipv4 = buffer(12, 4):ipv4()
             source_host_tree:add(f_source_host_ipv4, buffer(12, 4), source_host_ipv4)
-            
+
             if source_host_ipv4 ~= pinfo.src then
                 source_host_tree:add_proto_expert_info(f_mismatch_source_host_address)
             end
@@ -199,22 +199,22 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     if destination_host_family == 10 or destination_host_family == 2 then
         local destination_host_port = buffer(138, 2):uint()
         destination_host_tree:add(f_destination_host_port, buffer(138, 2), destination_host_port)
-        
+
         if destination_host_port ~= pinfo.dst_port then
             destination_host_tree:add_proto_expert_info(f_mismatch_destination_host_port)
         end
-        
+
         if destination_host_family == 10 then -- AF_INET6
             local destination_host_ipv6 = buffer(144, 16):ipv6()
             destination_host_tree:add(f_destination_host_ipv6, buffer(144, 16), destination_host_ipv6)
-            
+
             if destination_host_ipv6 ~= pinfo.dst then
                 destination_host_tree:add_proto_expert_info(f_mismatch_destination_host_address)
             end
         elseif destination_host_family == 2 then -- AF_INET
             local destination_host_ipv4 = buffer(140, 4):ipv4()
             destination_host_tree:add(f_destination_host_ipv4, buffer(140, 4), destination_host_ipv4)
-            
+
             if destination_host_ipv4 ~= pinfo.dst then
                 destination_host_tree:add_proto_expert_info(f_mismatch_destination_host_address)
             end
@@ -222,18 +222,18 @@ function mping_protocol.dissector(buffer, pinfo, tree)
     else
         destination_host_tree:add_proto_expert_info(e_invalid_destination_host_family)
     end
-    
+
     subtree:add(f_sequence_number, buffer(264, 4))
     subtree:add(f_pid, buffer(268, 4))
-    
+
     local timestamp_tree = subtree:add(buffer(272, 16), "Timestamp")
-    
+
     local seconds = buffer(272, 8):uint64()
     timestamp_tree:add(f_seconds, buffer(272, 8), seconds)
-    
+
     local microseconds = buffer(272, 8):uint64()
     timestamp_tree:add(f_microseconds, buffer(280, 8), microseconds)
-    
+
     if seconds < max_uint64 and microseconds < max_uint64 then -- check if :tonumber() is safe to use
         timestamp_tree:add_proto_expert_info(e_timestamp, "corresponds to absolute time: " .. format_time(seconds:tonumber()) .. ", " .. math.tointeger(microseconds:tonumber()) .. " microseconds")
     end

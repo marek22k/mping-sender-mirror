@@ -232,6 +232,16 @@ if selene.found()
     ])
 endif
 
+luacheck = find_program('luacheck', required: false)
+if luacheck.found()
+    run_target('luacheck', command: [
+        luacheck,
+        '--config', join_paths(meson.current_source_dir(), '.luacheckrc'),
+        'src',
+        lua_sources
+    ])
+endif
+
 lizard = find_program('lizard', required: false)
 if lizard.found()
     run_target('lizard', command: [
