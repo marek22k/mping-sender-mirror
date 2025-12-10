@@ -76,7 +76,7 @@ local mping_protocol = Proto("mping", "Multicast Ping Protocol")
 local MPING_VERSION = "2.0"
 
 local TYPE_SENDER = string.byte("s")
-local TYPE_RECEIVER = string.byte("s")
+local TYPE_RECEIVER = string.byte("r")
 
 local f_type_lookup = {
     [TYPE_SENDER] = "Sender",
