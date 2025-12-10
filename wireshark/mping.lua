@@ -63,6 +63,8 @@ MPing packet =
     otherwise bigendian
 ]]
 
+local max_uint64 = UInt64.new(math.maxinteger)
+
 local mping_plugin_info = {
     version = "1.0.0",
     author = "Marek Küthe",
@@ -188,8 +190,6 @@ mping_protocol.experts = {
 }
 
 function mping_protocol.dissector(buffer, pinfo, tree)
-    local max_uint64 = UInt64.new(math.maxinteger)
-
     if buffer:len() < 288 then
         return
     end
