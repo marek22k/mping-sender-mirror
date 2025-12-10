@@ -3,11 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mping_state.hpp"
-#include <chrono>
-#include <limits>
-#include <stdexcept>
-#include <boost/log/trivial.hpp>
-#include "network_serialization.hpp"
 
 using namespace MPingSender;
 
@@ -156,7 +151,7 @@ std::string MPingSender::MPingState::serialize() const
     result.append(mstate_version.begin(), mstate_version.end());
 
     /* T */
-    result.push_back(static_cast<char>(this->_type));
+    result.push_back(std::to_underlying(this->_type));
 
     /* L */
     auto ttl = NetworkSerialization::to_byte_array(
